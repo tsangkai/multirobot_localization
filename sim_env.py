@@ -5,10 +5,6 @@ from math import cos, sin, atan2, sqrt
 
 
 
-##### Simulation Parameter setup
-
-num_of_trial = 5
-total_T = 2000
 
 ##### Simulation Environment Setup
 
@@ -107,3 +103,16 @@ def relative_measurement(pos_1, theta_1, pos_2):
 	phi = atan2(delta_y, delta_x) + np.random.normal(0, sqrt(var_phi)) - theta_1
 
 	return [dis, phi]
+
+
+
+
+##### Simulation Parameter setup
+
+num_of_trial = 5
+total_T = 1600
+
+initial_position = np.matrix([1, 1, 1, 2, 2, 1, -1, -1, 1, 3], dtype=float).T
+initial_cov = i_mtx_10 * 0.01
+
+landmark_position = [0.01, 0.02]
