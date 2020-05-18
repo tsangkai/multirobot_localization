@@ -16,17 +16,17 @@ M = sim_env.M
 
 
 
-iteration = sim_env.num_of_trial
-time_end = sim_env.total_T
+num_of_trial = sim_env.num_of_trial
+total_T = sim_env.total_T
 
-sigma_tr_arr = [0] * time_end
-sigma_th_tr_arr = [0] * time_end
-error_arr = [0] * time_end
-
-
+sigma_tr_arr = [0] * total_T
+sigma_th_tr_arr = [0] * total_T
+error_arr = [0] * total_T
 
 
-for i in range(iteration):
+
+
+for i in range(num_of_trial):
 
 	print(i)
 
@@ -36,7 +36,7 @@ for i in range(iteration):
 	# initialization
 	robots = [None] * N
 	for n in range(N):
-		robots[n] = robot_gs_ci.Robot_GS_CI(n, initial.copy())
+		robots[n] = gs_ci_robot.GS_CI_Robot(n, initial.copy())
 
 	landmarks = [None] * M
 	for m in range(M):
@@ -44,7 +44,7 @@ for i in range(iteration):
 
 
 	# simulation body
-	for t in range(time_end):
+	for t in range(total_T):
  
 		### motion propagation 
 		robots[0].prop_update()
@@ -87,21 +87,21 @@ for i in range(iteration):
 			s += pow(robots[focus_index].s[2*j,0] - robots[j].position[0],2) + pow(robots[focus_index].s[2*j+1,0] - robots[j].position[1],2)
 		s = math.sqrt(s*0.2)
 
-		error_arr[t] = error_arr[t] + s*(1/float(iteration))
+		error_arr[t] = error_arr[t] + s*(1/float(num_of_trial))
 
 		# covariance error
-		sigma_tr_arr[t] = sigma_tr_arr[t] + math.sqrt(0.2*robots[focus_index].sigma.trace()[0,0] )*(1/float(iteration))
+		sigma_tr_arr[t] = sigma_tr_arr[t] + math.sqrt(0.2*robots[focus_index].sigma.trace()[0,0] )*(1/float(num_of_trial))
 
-		sigma_th_tr_arr[t] = sigma_th_tr_arr[t] + math.sqrt(0.2*robots[focus_index].th_sigma.trace()[0,0])*(1/float(iteration))
+		sigma_th_tr_arr[t] = sigma_th_tr_arr[t] + math.sqrt(0.2*robots[focus_index].th_sigma.trace()[0,0])*(1/float(num_of_trial))
 
 
 
 # output
-file = open('output_gs_ci.txt', 'w')
+file = open('gs_ci_output.txt', 'w')
 
-for t in range(time_end):
+for t in range(total_T):
 
-	file.write( str(sigma_tr_arr[t]) + ' ' + str(sigma_th_tr_arr[t]) + ' ' + str(error_arr[t]) + '\n')
+	file.write( str(sigma_tr_arr[t]) + ', ' + str(sigma_th_tr_arr[t]) + ', ' + str(error_arr[t]) + '\n')
 
 file.close()
 

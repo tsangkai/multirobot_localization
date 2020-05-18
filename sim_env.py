@@ -7,7 +7,7 @@ from math import cos, sin, atan2, sqrt
 
 ##### Simulation Parameter setup
 
-num_of_trial = 2
+num_of_trial = 5
 total_T = 2000
 
 ##### Simulation Environment Setup
@@ -23,7 +23,7 @@ dt = 0.5
 
 
 max_v = 0.09#25
-max_oemga = 0.05
+max_omega = 0.05
 
 
 var_u_v = pow(0.05, 2)* pow(max_v,2)
