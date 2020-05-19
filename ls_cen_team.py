@@ -29,14 +29,12 @@ class LS_Cen_Team:
 			ii = 2*i
 
 			# select valid motion input
-			[v, a_v] = [sim_env.max_v*random.uniform(-1,1), sim_env.max_omega*random.uniform(-1,1)]
-			v_star = v + random.normal(0, sqrt(sim_env.var_u_v))
-			pre_update_position = [self.position[ii] + cos(self.theta[i])*v_star*dt, self.position[ii+1] + sin(self.theta[i])*v_star*dt]
-
+			[v, omega] = [0,0]
+			v_star = 0
+			pre_update_position = [100, 100]
 
 			while(not sim_env.inRange(pre_update_position, sim_env.origin)):
-
-				[v, a_v] = [sim_env.max_v*random.uniform(-1,1), sim_env.max_omega*random.uniform(-1,1)]
+				[v, omega] = [sim_env.max_v*random.uniform(-1,1), sim_env.max_omega*random.uniform(-1,1)]
 				v_star = v + random.normal(0, sqrt(sim_env.var_u_v))
 				pre_update_position = [self.position[ii] + cos(self.theta[i])*v_star*dt, self.position[ii+1] + sin(self.theta[i])*v_star*dt]
 
@@ -45,7 +43,7 @@ class LS_Cen_Team:
 			self.position[ii,0] = self.position[ii,0] + cos(self.theta[i])*v_star*dt
 			self.position[ii+1,0] = self.position[ii+1,0] + sin(self.theta[i])*v_star*dt
 
-			self.theta[i] = self.theta[i] + a_v*dt
+			self.theta[i] = self.theta[i] + omega*dt
 
 			# estimation update
 			self.s[ii,0] = self.s[ii,0] + cos(self.theta[i])*v*dt
