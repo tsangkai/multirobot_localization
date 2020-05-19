@@ -82,16 +82,14 @@ for i in range(num_of_trial):
 
 		# real error
 		s = 0
-		for j in range(5):
+		for j in range(N):
 			s += pow(robots[0].s[2*j,0] - robots[j].position[0],2) + pow(robots[0].s[2*j+1,0] - robots[j].position[1],2)
-		s = math.sqrt(s*0.2)
 
-		error_arr[t] = error_arr[t] + s*(1/float(num_of_trial))
+		error_arr[t] += math.sqrt(s/float(N)) /float(num_of_trial)
 
 		# covariance error
 		total_sigma = robots[0].getSigma()
-		#total_sigma = robots[0].sigma_i + robots[0].sigma_d
-		sigma_tr_arr[t] = sigma_tr_arr[t] + math.sqrt(0.2*total_sigma.trace()[0,0] )*(1/float(num_of_trial))
+		sigma_tr_arr[t] += math.sqrt(total_sigma.trace()[0,0]/float(N)) /float(num_of_trial)
 
 
 #for k in range (5):

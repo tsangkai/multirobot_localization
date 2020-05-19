@@ -18,7 +18,7 @@ M = 1
 dt = 0.5
 
 
-max_v = 0.09#25
+max_v = 0.09
 max_omega = 0.05
 
 

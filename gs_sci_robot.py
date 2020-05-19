@@ -3,7 +3,6 @@
 
 from numpy import matrix
 from numpy import random
-# from numpy import linalg
 from math import cos, sin, atan2, sqrt
 
 from sim_env import *

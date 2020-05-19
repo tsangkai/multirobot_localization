@@ -24,10 +24,7 @@ class LS_Cen_Team:
 
 	def prop_update(self):
 
-
-
-
-		for i in range(5):
+		for i in range(sim_env.N):
 
 			ii = 2*i
 
@@ -42,9 +39,6 @@ class LS_Cen_Team:
 				[v, a_v] = [sim_env.max_v*random.uniform(-1,1), sim_env.max_omega*random.uniform(-1,1)]
 				v_star = v + random.normal(0, sqrt(sim_env.var_u_v))
 				pre_update_position = [self.position[ii] + cos(self.theta[i])*v_star*dt, self.position[ii+1] + sin(self.theta[i])*v_star*dt]
-
-
-
 
 
 			# real position update

@@ -58,9 +58,8 @@ class GS_Robot:
 
 			if j==self.index:
 				rot_mtx_theta = sim_env.rot_mtx(self.theta)
-				self.sigma[idx:idx+2, idx:idx+2] += (dt**2)*rot_mtx_theta*matrix([[sim_env.var_u_v, 0],[0, sim_env.var_u_theta]])*rot_mtx_theta.T
-				self.th_sigma[idx:idx+2, idx:idx+2] += 2*(dt**2)*matrix([[sim_env.var_u_v, 0],[0, sim_env.var_u_v]])
-
+				self.sigma[idx:idx+2, idx:idx+2] += (dt**2)*rot_mtx_theta*matrix([[sim_env.var_u_v, 0],[0, 0]])*rot_mtx_theta.T
+				self.th_sigma[idx:idx+2, idx:idx+2] += 2*(dt**2)*matrix([[sim_env.var_u_v, 0],[0, 0]])
 
 			else:
 				self.sigma[idx:idx+2, idx:idx+2] += (dt**2)*sim_env.var_v*sim_env.i_mtx_2.copy()
