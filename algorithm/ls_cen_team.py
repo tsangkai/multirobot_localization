@@ -49,8 +49,6 @@ class LS_Cen_Team:
 			self.sigma[ii:ii+2, ii:ii+2] += dt*dt*rot_mtx_theta_i*matrix([[sim_env.var_u_v, 0],[0, 0]])*rot_mtx_theta_i.T
 
 
-
-
 	def ablt_obsv(self, idx, obs_value, landmark):
 		ii = 2*idx
 
@@ -74,8 +72,6 @@ class LS_Cen_Team:
 		self.s = self.s + kalman_gain * (z-hat_z)
 
 		self.sigma = self.sigma - kalman_gain * H * self.sigma
-
-
 
 
 	def rela_obsv(self, idx, obs_idx, obs_value):
@@ -103,7 +99,6 @@ class LS_Cen_Team:
 		kalman_gain = self.sigma*H.getT()*sigma_invention.getI()
 
 		self.s = self.s + kalman_gain*(z - hat_z)
-
 		self.sigma = self.sigma - kalman_gain*H*self.sigma
 
 

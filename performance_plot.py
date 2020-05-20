@@ -13,8 +13,6 @@ color_green = '#47785E'
 color_mustard = '#E3AE27'
 color_purple = '#C796C7'
 
-
-
 sim_color = {
 	'ls_cen': color_green,
 	'ls_ci': color_purple,
@@ -164,7 +162,7 @@ plt.xlim([0, sim_env.total_T*sim_env.dt])
 plt.ylim([0, y_lim_upper])
 
 
-plt.savefig('plot/performance.png')
+# plt.savefig('plot/performance_dr.png')
 
 plt.show()
 

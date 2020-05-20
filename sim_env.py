@@ -2,6 +2,7 @@ import numpy as np
 
 from math import cos, sin, atan2, sqrt
 
+np.random.seed(0)
 
 ##### Simulation Parameter setup
 

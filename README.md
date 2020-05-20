@@ -4,7 +4,7 @@ This is the simulation code for the paper "Resilient Multirobot Cooperative Loca
 
 ## Usage
 
-All the simulation parameters are specified in `sim_env.py`.
+All the simulation parameters are specified in `sim_env.py`. One can specify the random seed here as well.
 
 For GS (global-state) algorithms, one can directly run `gs_ci_sim.py` or `gs_sci_sim.py`.
 

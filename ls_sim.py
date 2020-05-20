@@ -1,6 +1,7 @@
 import sys
 sys.path.append("algorithm/")
 
+
 import numpy as np
 import math
 
@@ -51,24 +52,25 @@ for i in range(num_of_trial):
 		# motion propagation
 		robots.prop_update()
 
+
 		# observation update
 		#robot 0
 		[dis, phi] = sim_env.relative_measurement(robots.position[0:2], robots.theta[0], landmarks[0].position)
 		robots.ablt_obsv(0, [dis, phi], landmarks[0])
 
 		# robot 2
-		[dis, phi] = sim_env.relative_measurement(robots.position[4:6], robots.theta[2], robots.position[0:2])
-		robots.rela_obsv(2, 0, [dis, phi])
+		# [dis, phi] = sim_env.relative_measurement(robots.position[4:6], robots.theta[2], robots.position[0:2])
+		# robots.rela_obsv(2, 0, [dis, phi])
 
-		[dis, phi] = sim_env.relative_measurement(robots.position[4:6], robots.theta[2], robots.position[2:4])
-		robots.rela_obsv(2, 1, [dis, phi])
+		# [dis, phi] = sim_env.relative_measurement(robots.position[4:6], robots.theta[2], robots.position[2:4])
+		# robots.rela_obsv(2, 1, [dis, phi])
 
 		# robot 3
 		[dis, phi] = sim_env.relative_measurement(robots.position[6:8], robots.theta[3], landmarks[0].position)
 		robots.ablt_obsv(3, [dis, phi], landmarks[0])
 
-		[dis, phi] = sim_env.relative_measurement(robots.position[6:8], robots.theta[3], robots.position[8:10])
-		robots.rela_obsv(3, 4, [dis, phi])
+		# [dis, phi] = sim_env.relative_measurement(robots.position[6:8], robots.theta[3], robots.position[8:10])
+		# robots.rela_obsv(3, 4, [dis, phi])
 		
 
 		# real error
