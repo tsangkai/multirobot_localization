@@ -64,11 +64,9 @@ class GS_SCI_Robot():
 		ii = 2*self.index
 		total_sigma = self.sigma_i + self.sigma_d
 
-
 		H_i = matrix([[0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0]], dtype=float)
 		H_i[0, ii] = -1
 		H_i[1, ii+1] = -1
-
 
 		H = sim_env.rot_mtx(self.theta).getT()*H_i
 		
@@ -78,13 +76,13 @@ class GS_SCI_Robot():
 		hat_z = sim_env.rot_mtx(self.theta).getT() * (landmark.position + H_i*self.s)
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
-		sigma_z = sim_env.rot_mtx(phi) * matrix([[sim_env.var_dis, 0],[0, dis*dis*sim_env.var_phi]]) * sim_env.rot_mtx(phi).getT() 
-		sigma_invention = H * total_sigma * H.getT()  + sigma_z
-		kalman_gain = total_sigma * H.getT()*sigma_invention.getI()
+		sigma_z = sim_env.rot_mtx(phi) * matrix([[sim_env.var_dis, 0],[0, (dis**2)*sim_env.var_phi]]) * sim_env.rot_mtx(phi).getT() 
+		sigma_invention = H * total_sigma * H.getT() + sigma_z
+		kalman_gain = total_sigma * H.getT() * sigma_invention.getI()
 
 		self.s = self.s + kalman_gain*(z - hat_z)
 
-		total_sigma = total_sigma - kalman_gain*H*total_sigma
+		total_sigma = total_sigma - kalman_gain * H * total_sigma
 		self.sigma_i = (i_mtx_10.copy() - kalman_gain*H) * self.sigma_i * (i_mtx_10.copy() - kalman_gain*H).getT() + kalman_gain * sigma_z * kalman_gain.getT()
 		self.sigma_d = total_sigma - self.sigma_i
 
@@ -99,7 +97,6 @@ class GS_SCI_Robot():
 		H_ij[0, jj] = 1
 		H_ij[1, jj+1] = 1
 
-
 		H = sim_env.rot_mtx(self.theta).getT()*H_ij
 
 		dis = obs_value[0]
@@ -108,14 +105,14 @@ class GS_SCI_Robot():
 		hat_z = H * self.s
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
-		sigma_z = sim_env.rot_mtx(phi) * matrix([[sim_env.var_dis, 0],[0, dis*dis*sim_env.var_phi]]) * sim_env.rot_mtx(phi).getT() 
+		sigma_z = sim_env.rot_mtx(phi) * matrix([[sim_env.var_dis, 0],[0, (dis**2)*sim_env.var_phi]]) * sim_env.rot_mtx(phi).getT() 
 
-		e =  0.83#  (iii+1)*0.01
+		e =  0.83
 
 		p_1 = (1/e) * self.sigma_d + self.sigma_i
-		p_2 = (1/(1-e)) * H * (self.sigma_i + self.sigma_d) * H.getT()  + sigma_z
-		sigma_invention = H * p_1 * H.getT()  + p_2
-		kalman_gain = p_1 *H.getT()*sigma_invention.getI()
+		p_2 = (1/(1-e)) * H * (self.sigma_i + self.sigma_d) * H.getT() + sigma_z
+		sigma_invention = H * p_1 * H.getT() + p_2
+		kalman_gain = p_1 * H.getT() * sigma_invention.getI()
 
 		self.s = self.s + kalman_gain*(z - hat_z)
 		total_sigma = (i_mtx_10.copy()-kalman_gain*H) * p_1
@@ -125,19 +122,18 @@ class GS_SCI_Robot():
 
 	def comm(self, comm_robot_s, comm_robot_sigma_i, comm_robot_sigma_d):
 
-
-		sci_coeff =  0.93#  (iii+1)*0.01
+		sci_coeff =  0.93
 
 
 		p_1 = (1/sci_coeff) * self.sigma_d + self.sigma_i
 		p_2 = (1/(1-sci_coeff)) * comm_robot_sigma_d + comm_robot_sigma_i
 
-		kalman_gain = p_1 * (p_1+p_2).getI()
-		self.s = self.s + kalman_gain * (comm_robot_s - self.s) 
 
-		total_sigma = (i_mtx_10.copy() - kalman_gain) * p_1
-		self.sigma_i = (i_mtx_10.copy() - kalman_gain) * self.sigma_i  * (i_mtx_10.copy() - kalman_gain).getT() + kalman_gain * comm_robot_sigma_i * kalman_gain.getT()
-		self.sigma_d = total_sigma - self.sigma_i
+		p = (p_1.getI() + p_2.getI()).getI()
+		self.s = p * (p_1.getI()*self.s + p_2.getI()*comm_robot_s)
+
+		self.sigma_i = p * (p_1.getI() * self.sigma_i * p_1.getI() + p_2.getI() * comm_robot_sigma_i * p_2.getI()) * p
+		self.sigma_d = p - self.sigma_i
 
 
 	def getSigma(self):

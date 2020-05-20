@@ -83,16 +83,13 @@ for i in range(num_of_trial):
 		robots[2].comm(robots[3].s, robots[3].sigma_i, robots[3].sigma_d)
 		robots[0].comm(robots[2].s, robots[2].sigma_i, robots[2].sigma_d)
 		
-
+		
 
 		# real error
 		s = 0
 		for j in range(N):
 		 	s += (robots[0].s[2*j,0] - robots[j].position[0]) ** 2 + (robots[0].s[2*j+1,0] - robots[j].position[1]) ** 2
 		error_arr[t] += math.sqrt(s/float(N)) /float(num_of_trial)
-
-
-
 
 
 		# covariance error

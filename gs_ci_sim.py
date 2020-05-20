@@ -52,6 +52,7 @@ for i in range(num_of_trial):
 		robots[3].prop_update()
 		robots[4].prop_update()
 		
+		
 		### observation update
 		#robot 0
 		[dis, phi] = sim_env.relative_measurement(robots[0].position, robots[0].theta, landmarks[0].position)
@@ -77,7 +78,7 @@ for i in range(num_of_trial):
 		### communication update
 		robots[2].comm(robots[3].s, robots[3].sigma, robots[3].th_sigma)
 		robots[0].comm(robots[2].s, robots[2].sigma, robots[2].th_sigma)
-
+		
 
 		### error calculation
 		# real error
