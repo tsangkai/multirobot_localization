@@ -7,7 +7,6 @@ import sim_env
 dt = sim_env.dt
 
 
-
 class LS_Cen_Team:
 
 
@@ -44,13 +43,13 @@ class LS_Cen_Team:
 			self.theta[i] = self.theta[i] + omega*dt
 
 			# estimation update
-			self.s[ii,0] = self.s[ii,0] + cos(self.theta[i])*v*dt
-			self.s[ii+1,0] = self.s[ii+1,0] + sin(self.theta[i])*v*dt
+			self.s[ii,0] += cos(self.theta[i]) * v * dt
+			self.s[ii+1,0] += sin(self.theta[i]) * v * dt
 
 			# covariance update
 			rot_mtx_theta_i = sim_env.rot_mtx(self.theta[i])
-			self.sigma[ii:ii+2, ii:ii+2] = self.sigma[ii:ii+2, ii:ii+2]+ dt*dt*rot_mtx_theta_i*matrix([[sim_env.var_u_v, 0],[0, 0]])*rot_mtx_theta_i.T
-			self.th_sigma[ii:ii+2, ii:ii+2] = self.th_sigma[ii:ii+2, ii:ii+2]+ dt*dt*matrix([[sim_env.var_u_v, 0],[0, 0]])
+			self.sigma[ii:ii+2, ii:ii+2] += dt*dt*rot_mtx_theta_i*matrix([[sim_env.var_u_v, 0],[0, 0]])*rot_mtx_theta_i.T
+			self.th_sigma[ii:ii+2, ii:ii+2] += dt*dt*matrix([[sim_env.var_u_v, 0],[0, 0]])
 
 
 
