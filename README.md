@@ -12,11 +12,15 @@ For LS (local-state) algorithms, one can run `ls_sim.py` with argument `cen`, `b
 
 ## Simulation Result
 
-![Performance plot](plot/performance.png)
-
-This simulation uses the topology presented in our paper.
-
 
 ![Performance plot](plot/performance_dr.png)
 
 This simulation with motion propagation update only.
+
+![Performance plot](plot/performance_ao.png)
+
+This simulation with absolute obervation only.
+
+![Performance plot](plot/performance.png)
+
+This simulation uses the topology presented in our paper.
