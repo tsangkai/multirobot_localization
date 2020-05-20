@@ -58,7 +58,7 @@ for i in range(num_of_trial):
 		[dis, phi] = sim_env.relative_measurement(robots[2].position, robots[2].theta, robots[1].position)
 		robots[2].rela_obsv(1, [dis, phi])
 
-		# observation - robot 3
+		# robot 3
 		[dis, phi] = sim_env.relative_measurement(robots[3].position, robots[3].theta, landmarks[0].position)
 		robots[3].ablt_obsv([dis, phi], landmarks[0])
 
