@@ -157,14 +157,14 @@ plt.plot(time_arr, gs_sci_tr, linewidth = 1.6, color = sim_color['gs_sci'])
 
 
 
-# plt.legend()
+plt.legend()
 plt.xlabel('time [s]')
 plt.ylabel('RMTE [m]')
 plt.xlim([0, sim_env.total_T*sim_env.dt])
 plt.ylim([0, y_lim_upper])
 
 
-plt.savefig('performance.png')
+plt.savefig('plot/performance.png')
 
 plt.show()
 
