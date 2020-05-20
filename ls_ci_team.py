@@ -63,9 +63,6 @@ class LS_CI_Team:
 			self.sigma[ii:ii+2, ii:ii+2] = self.sigma[ii:ii+2, ii:ii+2]+ dt*dt*rot_mtx(self.theta[i])*matrix([[var_u_v, 0],[0, 0]])*rot_mtx(self.theta[i]).T
 
 
-
-
-
 	def ablt_obsv(self, idx, obs_value, landmark):
 
 		ii = 2*idx
@@ -79,68 +76,46 @@ class LS_CI_Team:
 
 		H = rot_mtx(self.theta[idx]).getT()*matrix([[-1,0],[0,-1]], dtype=float)
 
-		# hat_z = rot_mtx(self.theta[idx]).getT() * (landmark.position + H * local_s)
 		hat_z = rot_mtx(self.theta[idx]).getT() * (landmark.position + matrix([[-1,0],[0,-1]], dtype=float) * local_s)
 
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
-		# print(hat_z)
-		# print(z)
 
 
 		sigma_z = rot_mtx(phi) * matrix([[var_dis, 0],[0, dis*dis*var_phi]]) * rot_mtx(phi).getT() 
 		sigma_invention = H * local_sigma * H.getT() + sigma_z
 		kalman_gain = local_sigma * H.getT() * sigma_invention.getI()
 
-		# print(self.sigma[ii:ii+2,ii:ii+2])
 
 		self.s[ii:ii+2]	= local_s + kalman_gain * (z - hat_z)
-		self.sigma[ii:ii+2,ii:ii+2] = local_sigma - kalman_gain*H*local_sigma
+		self.sigma[ii:ii+2,ii:ii+2] = local_sigma - kalman_gain * H * local_sigma
 
-		# print(self.sigma[ii:ii+2,ii:ii+2])
-		# raw_input()
 
 	def rela_obsv(self, idx, obs_idx, obs_value):
-		i = 2*idx
-		j = 2*obs_idx
+		ii = 2*idx
+		jj = 2*obs_idx
 
-
-		H_ij = matrix([[0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0]], dtype=float)
-		H_ij[0, i] = -1
-		H_ij[1, i+1] = -1
-		H_ij[0, j] = 1
-		H_ij[1, j+1] = 1
-
-
-		H = rot_mtx(self.theta[idx]).getT()*H_ij
+		sigma_i = self.sigma[ii:ii+2,ii:ii+2]
+		sigma_j = self.sigma[jj:jj+2,jj:jj+2]
 
 		dis = obs_value[0]
 		phi = obs_value[1]
 
-		#z = [dis*cos(phi), dis*sin(phi)].getT()
-		#hat_z = H * self.s
 		z = matrix([[dis*cos(phi)],[dis*sin(phi)]])
 
+		hat_j = self.s[ii:ii+2] + rot_mtx(self.theta[idx]) * z
 
-		
-		hat_j = z + self.s[i:i+2]
-
-		#matrix([[z[0]+self.s[i]], [z[1],self.s[i+1]]], dtype=float)
-
-
-		sigma_i = self.sigma[i:i+2,i:i+2]
-		sigma_j = self.sigma[j:j+2,j:j+2]
+		sigma_z = rot_mtx(phi) * matrix([[var_dis, 0],[0, dis*dis*var_phi]]) * rot_mtx(phi).getT() 
+		sigma_hat_j = sigma_i + rot_mtx(self.theta[idx]) * sigma_z * rot_mtx(self.theta[idx]).getT()
 
 
-		e = 0.83
 
 
-		#print(self.s)
+		ci_coeff = 0.83
 
-		sigma_j_next_inv = e*sigma_j.getI() + (1-e)*sigma_i.getI()
+		sigma_j_next_inv = ci_coeff * sigma_j.getI() + (1-ci_coeff) * sigma_hat_j.getI()
 
-
-		self.s[j:j+2] = sigma_j_next_inv.getI()*(e*sigma_j.getI()*self.s[j:j+2]  + (1-e)*sigma_i.getI()*hat_j)
-		self.sigma[j:j+2,j:j+2] = sigma_j_next_inv.getI()
+		self.s[jj:jj+2] = sigma_j_next_inv.getI()*(ci_coeff*sigma_j.getI()*self.s[jj:jj+2] + (1-ci_coeff)*sigma_hat_j.getI()*hat_j)
+		self.sigma[jj:jj+2,jj:jj+2] = sigma_j_next_inv.getI()
 
 
