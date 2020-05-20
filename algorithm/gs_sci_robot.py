@@ -2,8 +2,10 @@ from numpy import matrix
 from numpy import random
 from math import cos, sin, atan2, sqrt
 
-from sim_env import *
+import sim_env
 
+dt = sim_env.dt
+i_mtx_10 = sim_env.i_mtx_10
 
 
 class GS_SCI_Robot():
@@ -12,9 +14,9 @@ class GS_SCI_Robot():
 		self.index = index
 
 		self.s = initial_s.copy()
-		self.sigma_d = 0.01*initial_cov.copy()
+		self.sigma_d = 0.01*sim_env.initial_cov.copy()
 
-		self.sigma_i = 0.99*initial_cov.copy()
+		self.sigma_i = 0.99*sim_env.initial_cov.copy()
 
 		self.position = [initial_s[2*index,0], initial_s[2*index+1,0]]
 		self.theta = 0
@@ -24,23 +26,20 @@ class GS_SCI_Robot():
 	def prop_update(self):
 
 		# select valid motion input
-		[v, a_v] = [max_v*random.uniform(-1,1), max_omega*random.uniform(-1,1)]
-		v_star = v + random.normal(0, sqrt(var_u_v))
-		pre_update_position = [self.position[0] + cos(self.theta)*v_star*dt, self.position[1] + sin(self.theta)*v_star*dt]
+		[v, omega] = [0,0]
+		v_star = 0
+		pre_update_position = [100, 100]
 
-
-		while(not inRange(pre_update_position, origin)):
-
-			[v, a_v] = [random.uniform(-max_v,max_v), random.uniform(-max_oemga,max_oemga)]
-			v_star = v + random.normal(0, sqrt(var_u_v))
+		while(not sim_env.inRange(pre_update_position, sim_env.origin)):
+			[v, omega] = [sim_env.max_v*random.uniform(-1,1), sim_env.max_omega*random.uniform(-1,1)]
+			v_star = v + random.normal(0, sqrt(sim_env.var_u_v))
 			pre_update_position = [self.position[0] + cos(self.theta)*v_star*dt, self.position[1] + sin(self.theta)*v_star*dt]
-
 
 		# real position update
 		self.position[0] = self.position[0] + cos(self.theta)*v_star*dt
 		self.position[1] = self.position[1] + sin(self.theta)*v_star*dt
 
-		self.theta = self.theta + a_v*dt
+		self.theta = self.theta + omega*dt
 
 		ii = 2*self.index
 
@@ -50,15 +49,15 @@ class GS_SCI_Robot():
 
 
 		# covariance update
-		for j in range(N):
+		for j in range(sim_env.N):
 			jj = 2*j
 
 			if j==self.index:
-				rot_mtx_theta = rot_mtx(self.theta)
-				self.sigma_i[jj:jj+2, jj:jj+2] += dt*dt*rot_mtx_theta*matrix([[var_u_v, 0],[0, 0]])*rot_mtx_theta.T
+				rot_mtx_theta = sim_env.rot_mtx(self.theta)
+				self.sigma_i[jj:jj+2, jj:jj+2] += dt*dt*rot_mtx_theta*matrix([[sim_env.var_u_v, 0],[0, 0]])*rot_mtx_theta.T
 
 			else:
-				self.sigma_i[jj:jj+2, jj:jj+2] += dt*dt*var_v*i_mtx_2.copy()
+				self.sigma_i[jj:jj+2, jj:jj+2] += dt*dt*sim_env.var_v*sim_env.i_mtx_2.copy()
 
 
 	def ablt_obsv(self, obs_value, landmark):
@@ -71,15 +70,15 @@ class GS_SCI_Robot():
 		H_i[1, ii+1] = -1
 
 
-		H = rot_mtx(self.theta).getT()*H_i
+		H = sim_env.rot_mtx(self.theta).getT()*H_i
 		
 		dis = obs_value[0]
 		phi = obs_value[1]
 
-		hat_z = rot_mtx(self.theta).getT() * (landmark.position + H_i*self.s)
+		hat_z = sim_env.rot_mtx(self.theta).getT() * (landmark.position + H_i*self.s)
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
-		sigma_z = rot_mtx(phi) * matrix([[var_dis, 0],[0, dis*dis*var_phi]]) * rot_mtx(phi).getT() 
+		sigma_z = sim_env.rot_mtx(phi) * matrix([[sim_env.var_dis, 0],[0, dis*dis*sim_env.var_phi]]) * sim_env.rot_mtx(phi).getT() 
 		sigma_invention = H * total_sigma * H.getT()  + sigma_z
 		kalman_gain = total_sigma * H.getT()*sigma_invention.getI()
 
@@ -101,7 +100,7 @@ class GS_SCI_Robot():
 		H_ij[1, jj+1] = 1
 
 
-		H = rot_mtx(self.theta).getT()*H_ij
+		H = sim_env.rot_mtx(self.theta).getT()*H_ij
 
 		dis = obs_value[0]
 		phi = obs_value[1]
@@ -109,7 +108,7 @@ class GS_SCI_Robot():
 		hat_z = H * self.s
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
-		sigma_z = rot_mtx(phi) * matrix([[var_dis, 0],[0, dis*dis*var_phi]]) * rot_mtx(phi).getT() 
+		sigma_z = sim_env.rot_mtx(phi) * matrix([[sim_env.var_dis, 0],[0, dis*dis*sim_env.var_phi]]) * sim_env.rot_mtx(phi).getT() 
 
 		e =  0.83#  (iii+1)*0.01
 

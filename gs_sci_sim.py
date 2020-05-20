@@ -56,6 +56,7 @@ for i in range(num_of_trial):
 		robots[3].prop_update()
 		robots[4].prop_update()
 
+		
 		#robot 0
 		[dis, phi] = sim_env.relative_measurement(robots[0].position, robots[0].theta, landmarks[0].position)
 		robots[0].ablt_obsv([dis, phi], landmarks[0])
@@ -77,26 +78,26 @@ for i in range(num_of_trial):
 		robots[3].rela_obsv(4, [dis, phi])
 
 
+		
 		# communication
 		robots[2].comm(robots[3].s, robots[3].sigma_i, robots[3].sigma_d)
 		robots[0].comm(robots[2].s, robots[2].sigma_i, robots[2].sigma_d)
-
+		
 
 
 		# real error
 		s = 0
 		for j in range(N):
-			s += pow(robots[0].s[2*j,0] - robots[j].position[0],2) + pow(robots[0].s[2*j+1,0] - robots[j].position[1],2)
-
+		 	s += (robots[0].s[2*j,0] - robots[j].position[0]) ** 2 + (robots[0].s[2*j+1,0] - robots[j].position[1]) ** 2
 		error_arr[t] += math.sqrt(s/float(N)) /float(num_of_trial)
+
+
+
+
 
 		# covariance error
 		total_sigma = robots[0].getSigma()
-		sigma_tr_arr[t] += math.sqrt(total_sigma.trace()[0,0]/float(N)) /float(num_of_trial)
-
-
-#for k in range (5):
-#	robots[k].status()
+		sigma_tr_arr[t] += math.sqrt(total_sigma.trace()[0,0]/float(N)) / float(num_of_trial)
 
 
 
