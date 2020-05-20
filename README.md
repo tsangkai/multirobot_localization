@@ -6,4 +6,4 @@ This is the simulation code for the paper "Resilient Multirobot Cooperative Loca
 
 
 
-![Performance](https://imgur.com/takMzIm)
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/d6WdFn0"><a href="//imgur.com/a/d6WdFn0"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
