@@ -120,7 +120,7 @@ gs_sci_file.close()
 
 ### Performance Plot
 
-y_lim_upper = 1.1 # 0.3
+y_lim_upper = 0.3 #1.1 
 
 plt.figure(1)
 plt.subplot(211)
