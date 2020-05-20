@@ -1,3 +1,6 @@
+import sys
+sys.path.append("algorithm/")
+
 import numpy as np
 import math
 

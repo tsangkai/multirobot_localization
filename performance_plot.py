@@ -164,7 +164,7 @@ plt.xlim([0, sim_env.total_T*sim_env.dt])
 plt.ylim([0, y_lim_upper])
 
 
-plt.savefig('plot/performance.png')
+# plt.savefig('plot/performance.png')
 
 plt.show()
 

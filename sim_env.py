@@ -6,10 +6,7 @@ from math import cos, sin, atan2, sqrt
 ##### Simulation Parameter setup
 
 num_of_trial = 5
-total_T = 2000# 1600
-
-
-
+total_T = 2000
 
 
 ##### Simulation Environment Setup
@@ -20,19 +17,15 @@ N = 5
 # number of landmark
 M = 1
 
-
 dt = 0.5
-
 
 max_v = 0.09
 max_omega = 0.05
 
-
 var_u_v = pow(0.05, 2)* pow(max_v,2)
 var_u_theta = 0.0001
 
-
-var_v = 2.0 * 4*max_v*max_v/12
+var_v = 2.0 * 4*max_v*max_v / 12
 
 var_dis = pow(0.05,2)
 var_phi = pow(2.0 / 180, 2)
@@ -41,7 +34,6 @@ d_max = 25
 
 
 ##### Constants
-
 
 J = np.matrix([[0, -1],[1, 0]])
 
@@ -69,20 +61,14 @@ i_mtx_10 = np.matrix([
 	[0,0,0,0,0,0,0,0,1,0],
 	[0,0,0,0,0,0,0,0,0,1]], dtype=float)
 
-
 i_mtx_2 = np.matrix([
 	[1, 0],
 	[0, 1]], dtype=float)
-
-
 
 initial_position = np.matrix([1, 1, 1, 2, 2, 1, -1, -1, 1, 3], dtype=float).T
 initial_cov = i_mtx_10 * 0.01
 
 landmark_position = [0.01, 0.02]
-
-########################################################
-
 
 origin = [0.0, 0.0]
 
@@ -98,13 +84,8 @@ class Landmark:
 		self.index = index
 		self.position = position
 
-
-
-
 def rot_mtx(theta):
 	return np.matrix([[cos(theta), -sin(theta)], [sin(theta), cos(theta)]])
-
-
 
 def relative_measurement(pos_1, theta_1, pos_2):
 

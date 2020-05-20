@@ -6,11 +6,10 @@ from numpy import random
 from math import cos, sin, atan2, sqrt
 
 from sim_env import *
-from gs_robot import GS_Robot
 
 
 
-class GS_SCI_Robot(GS_Robot):
+class GS_SCI_Robot():
 
 	def __init__(self, index , initial_s):
 		self.index = index
