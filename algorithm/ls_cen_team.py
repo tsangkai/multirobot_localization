@@ -15,8 +15,6 @@ class LS_Cen_Team:
 		self.s = initial_s.copy()
 		self.sigma = sim_env.initial_cov.copy()
 
-		self.th_sigma = sim_env.initial_cov.copy()
-
 		self.position = initial_s.copy()
 		self.theta = [0.0,0,0,0,0]
 
@@ -49,7 +47,6 @@ class LS_Cen_Team:
 			# covariance update
 			rot_mtx_theta_i = sim_env.rot_mtx(self.theta[i])
 			self.sigma[ii:ii+2, ii:ii+2] += dt*dt*rot_mtx_theta_i*matrix([[sim_env.var_u_v, 0],[0, 0]])*rot_mtx_theta_i.T
-			self.th_sigma[ii:ii+2, ii:ii+2] += dt*dt*matrix([[sim_env.var_u_v, 0],[0, 0]])
 
 
 
@@ -73,15 +70,10 @@ class LS_Cen_Team:
 		sigma_invention = H * self.sigma * H.getT()  + sigma_z
 		kalman_gain = self.sigma * H.getT() * sigma_invention.getI()
 
-		sigma_th_z =  max(sim_env.var_dis, sim_env.d_max*sim_env.d_max*sim_env.var_phi)* sim_env.i_mtx_2.copy() 
-		sigma_th_invention = H_i * self.th_sigma * H_i.getT()  + sigma_th_z
-		kalman_th_gain = self.th_sigma*H_i.getT()*sigma_th_invention.getI()
-
 
 		self.s = self.s + kalman_gain * (z-hat_z)
 
 		self.sigma = self.sigma - kalman_gain * H * self.sigma
-		self.th_sigma = self.th_sigma - kalman_th_gain*H_i*self.th_sigma		
 
 
 
@@ -103,7 +95,6 @@ class LS_Cen_Team:
 		dis = obs_value[0]
 		phi = obs_value[1]
 
-		#z = [dis*cos(phi), dis*sin(phi)]
 		hat_z = H * self.s
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
@@ -111,20 +102,10 @@ class LS_Cen_Team:
 		sigma_invention = H * self.sigma * H.getT()  + sigma_z
 		kalman_gain = self.sigma*H.getT()*sigma_invention.getI()
 
-
-
-		sigma_th_z =  max(sim_env.var_dis, sim_env.d_max*sim_env.d_max*sim_env.var_phi)* sim_env.i_mtx_2.copy() 
-		sigma_th_invention = H_ij * self.th_sigma * H_ij.getT()  + sigma_th_z
-		kalman_th_gain = self.th_sigma*H_ij.getT()*sigma_th_invention.getI()
-
-
-
-
 		self.s = self.s + kalman_gain*(z - hat_z)
 
 		self.sigma = self.sigma - kalman_gain*H*self.sigma
 
-		self.th_sigma = self.th_sigma - kalman_th_gain*H_ij*self.th_sigma		
 
 
 
