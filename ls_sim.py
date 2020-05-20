@@ -52,6 +52,7 @@ for i in range(num_of_trial):
 		robots.prop_update()
 
 		
+
 		#robot 0
 		[dis, phi] = sim_env.relative_measurement(robots.position[0:2], robots.theta[0], landmarks[0].position)
 		robots.ablt_obsv(0, [dis, phi], landmarks[0])
@@ -75,13 +76,16 @@ for i in range(num_of_trial):
 		# real error
 		s = 0
 		for j in range(N):
-			s += pow(robots.s[2*j,0] - robots.position[2*j,0],2) + pow(robots.s[2*j+1,0] - robots.position[2*j+1,0],2)
+			jj = 2*j
+			s += ((robots.s[jj,0] - robots.position[jj,0])**2 + (robots.s[jj+1,0] - robots.position[jj+1,0])**2)
 		
-		# s = math.sqrt(s / float(N))
 		error_arr[t] += math.sqrt(s/float(N)) / float(num_of_trial)
 
 		# covariance error
 		sigma_tr_arr[t] += math.sqrt(robots.sigma.trace()[0,0]/float(N)) /float(num_of_trial)
+
+
+# output performance
 
 file = open(output_file_name, 'w')
 

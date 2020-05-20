@@ -48,11 +48,8 @@ for i in range(num_of_trial):
 		robots[2].prop_update()
 		robots[3].prop_update()
 		robots[4].prop_update()
-
-
+		
 		### observation update
-
-
 		#robot 0
 		[dis, phi] = sim_env.relative_measurement(robots[0].position, robots[0].theta, landmarks[0].position)
 		robots[0].ablt_obsv([dis, phi], landmarks[0])

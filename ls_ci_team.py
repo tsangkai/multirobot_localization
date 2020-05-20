@@ -108,9 +108,6 @@ class LS_CI_Team:
 		sigma_z = rot_mtx(phi) * matrix([[var_dis, 0],[0, dis*dis*var_phi]]) * rot_mtx(phi).getT() 
 		sigma_hat_j = sigma_i + rot_mtx(self.theta[idx]) * sigma_z * rot_mtx(self.theta[idx]).getT()
 
-
-
-
 		ci_coeff = 0.83
 
 		sigma_j_next_inv = ci_coeff * sigma_j.getI() + (1-ci_coeff) * sigma_hat_j.getI()

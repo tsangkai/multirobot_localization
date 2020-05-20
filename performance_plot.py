@@ -80,6 +80,8 @@ for line in ls_bda_file:
 	line_count += 1
 ls_bda_file.close()
 
+
+
 ### GS CI
 gs_ci_tr = np.empty(T)
 gs_ci_upper_tr = np.empty(T)
@@ -118,8 +120,9 @@ for line in gs_sci_file:
 gs_sci_file.close()
 
 
-
 ### Performance Plot
+
+y_lim_upper = 0.3
 
 plt.figure(1)
 plt.subplot(211)
@@ -132,10 +135,9 @@ plt.plot(time_arr, gs_ci_error, label = 'GS CI', linewidth = 1.6, color = sim_co
 plt.plot(time_arr, gs_sci_error, label = 'GS SCI', linewidth = 1.6, color = sim_color['gs_sci'])
 
 plt.legend()
-plt.xlabel('time [s]')
 plt.ylabel('RMSE [m]')
-plt.ylim([0, 0.32])
-
+plt.xlim([0, sim_env.total_T*sim_env.dt])
+plt.ylim([0, y_lim_upper])
 
 
 
@@ -155,13 +157,14 @@ plt.plot(time_arr, gs_sci_tr, linewidth = 1.6, color = sim_color['gs_sci'])
 
 
 
-plt.legend()
-
+# plt.legend()
+plt.xlabel('time [s]')
 plt.ylabel('RMTE [m]')
-plt.ylim([0, 0.32])
+plt.xlim([0, sim_env.total_T*sim_env.dt])
+plt.ylim([0, y_lim_upper])
 
 
-
+plt.savefig('performance.png')
 
 plt.show()
 
