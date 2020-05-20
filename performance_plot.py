@@ -122,7 +122,7 @@ gs_sci_file.close()
 
 ### Performance Plot
 
-y_lim_upper = 0.3
+y_lim_upper = 1.1 # 0.3
 
 plt.figure(1)
 plt.subplot(211)
@@ -164,7 +164,7 @@ plt.xlim([0, sim_env.total_T*sim_env.dt])
 plt.ylim([0, y_lim_upper])
 
 
-# plt.savefig('plot/performance_dr.png')
+plt.savefig('plot/performance.png')
 
 plt.show()
 

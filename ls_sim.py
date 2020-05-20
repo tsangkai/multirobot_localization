@@ -22,7 +22,6 @@ elif algorithm == 'ci':
 print("run " + algorithm + ":")
 
 
-
 num_of_trial = sim_env.num_of_trial
 total_T = sim_env.total_T
 
@@ -53,7 +52,6 @@ for i in range(num_of_trial):
 		robots.prop_update()
 
 		
-		
 		#robot 0
 		[dis, phi] = sim_env.relative_measurement(robots.position[0:2], robots.theta[0], landmarks[0].position)
 		robots.ablt_obsv(0, [dis, phi], landmarks[0])
@@ -71,7 +69,6 @@ for i in range(num_of_trial):
 
 		[dis, phi] = sim_env.relative_measurement(robots.position[6:8], robots.theta[3], robots.position[8:10])
 		robots.rela_obsv(3, 4, [dis, phi])
-		
 		
 
 		# real error
