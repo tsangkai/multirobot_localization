@@ -70,7 +70,6 @@ class LS_CI_Team:
 
 		ii = 2*idx
 
-		H = rot_mtx(self.theta[idx]).getT()*matrix([[-1,0],[0,-1]], dtype=float)
 
 		local_s = self.s[ii:ii+2]	
 		local_sigma = self.sigma[ii:ii+2,ii:ii+2]
@@ -78,29 +77,28 @@ class LS_CI_Team:
 		dis = obs_value[0]
 		phi = obs_value[1]
 
-		#z = [dis*cos(phi), dis*sin(phi)]
-		hat_z = rot_mtx(self.theta[idx]).getT() * (landmark.position + H*local_s)
+		H = rot_mtx(self.theta[idx]).getT()*matrix([[-1,0],[0,-1]], dtype=float)
+
+		# hat_z = rot_mtx(self.theta[idx]).getT() * (landmark.position + H * local_s)
+		hat_z = rot_mtx(self.theta[idx]).getT() * (landmark.position + matrix([[-1,0],[0,-1]], dtype=float) * local_s)
+
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
+		# print(hat_z)
+		# print(z)
+
+
 		sigma_z = rot_mtx(phi) * matrix([[var_dis, 0],[0, dis*dis*var_phi]]) * rot_mtx(phi).getT() 
-		sigma_invention = H * local_sigma * H.getT()  + sigma_z
-		kalman_gain = local_sigma*H.getT()*sigma_invention.getI()
+		sigma_invention = H * local_sigma * H.getT() + sigma_z
+		kalman_gain = local_sigma * H.getT() * sigma_invention.getI()
 
+		# print(self.sigma[ii:ii+2,ii:ii+2])
 
-
-		#sigma_th_z =  matrix([[d_max*d_max*var_phi, 0],[0, d_max*d_max*var_phi]]) 
-		#sigma_th_invention = H_i * self.th_sigma * H_i.getT()  + sigma_th_z
-		#kalman_th_gain = self.th_sigma*H_i.getT()*sigma_th_invention.getI()
-
-
-		self.s[ii:ii+2]	= local_s + kalman_gain*(z - hat_z)
-
+		self.s[ii:ii+2]	= local_s + kalman_gain * (z - hat_z)
 		self.sigma[ii:ii+2,ii:ii+2] = local_sigma - kalman_gain*H*local_sigma
 
-		#self.th_sigma = self.th_sigma - kalman_th_gain*H_i*self.th_sigma		
-
-
-
+		# print(self.sigma[ii:ii+2,ii:ii+2])
+		# raw_input()
 
 	def rela_obsv(self, idx, obs_idx, obs_value):
 		i = 2*idx

@@ -24,7 +24,6 @@ class LS_BDA_Team:
 
 	def prop_update(self):
 
-
 		for i in range(sim_env.N):
 			ii = 2*i
 
@@ -45,11 +44,11 @@ class LS_BDA_Team:
 
 			self.theta[i] = self.theta[i] + omega*dt
 
-
 			# estimation update
 			self.s[ii,0] = self.s[ii,0] + cos(self.theta[i])*v*dt
 			self.s[ii+1,0] = self.s[ii+1,0] + sin(self.theta[i])*v*dt
 
+			# covariance update
 			rot_mtx_theta_i = sim_env.rot_mtx(self.theta[i])
 			self.sigma[ii:ii+2, ii:ii+2] += (dt**2)*rot_mtx_theta_i*matrix([[sim_env.var_u_v, 0],[0, 0]])*rot_mtx_theta_i.T
 
@@ -58,36 +57,32 @@ class LS_BDA_Team:
 
 
 	def ablt_obsv(self, idx, obs_value, landmark):
-
 		ii = 2*idx
 
-		H = sim_env.rot_mtx(self.theta[idx]).getT()*matrix([[-1,0],[0,-1]], dtype=float)
-
-		local_s = self.s[ii:ii+2]	
+		local_s = self.s[ii:ii+2].copy()
 		local_sigma = self.sigma[ii:ii+2,ii:ii+2]
+
+		H = sim_env.rot_mtx(self.theta[idx]).getT()*matrix([[-1,0],[0,-1]], dtype=float)
 
 		dis = obs_value[0]
 		phi = obs_value[1]
 
-		#z = [dis*cos(phi), dis*sin(phi)]
-		hat_z = sim_env.rot_mtx(self.theta[idx]).getT() * (landmark.position + H*local_s)
+		# hat_z = sim_env.rot_mtx(self.theta[idx]).getT() * (landmark.position + H*local_s)
+		hat_z = sim_env.rot_mtx(self.theta[idx]).getT() * (landmark.position + matrix([[-1,0],[0,-1]], dtype=float) * local_s)
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
 		sigma_z = sim_env.rot_mtx(phi) * matrix([[sim_env.var_dis, 0],[0, dis*dis*sim_env.var_phi]]) * sim_env.rot_mtx(phi).getT() 
 		sigma_invention = H * local_sigma * H.getT()  + sigma_z
-		kalman_gain = local_sigma*H.getT()*sigma_invention.getI()
+		kalman_gain = local_sigma * H.getT() * sigma_invention.getI()
 
 
+		self.s[ii:ii+2]	= local_s + kalman_gain * (z - hat_z)
 
-		self.s[ii:ii+2]	= local_s + kalman_gain*(z - hat_z)
+		self.sigma[ii:ii+2,ii:ii+2] = local_sigma - kalman_gain * H * local_sigma
 
-		self.sigma[ii:ii+2,ii:ii+2] = local_sigma - kalman_gain*H*local_sigma
-
-
-		multi_i = (sim_env.i_mtx_2.copy() - kalman_gain*H )
-
+		multi_i = sim_env.i_mtx_2.copy() - kalman_gain * H
 		for k in range(5):
-			if( not (k==idx)):
+			if( k!=idx ):
 				kk = 2*k
 				self.sigma[ii:ii+2,kk:kk+2] = multi_i * self.sigma[ii:ii+2,kk:kk+2]
 				self.sigma[kk:kk+2,ii:ii+2] = self.sigma[kk:kk+2,ii:ii+2] * multi_i.getT()
@@ -126,10 +121,11 @@ class LS_BDA_Team:
 
 		sigma_z = sim_env.rot_mtx(phi) * matrix([[sim_env.var_dis, 0],[0, dis*dis*sim_env.var_phi]]) * sim_env.rot_mtx(phi).getT() 
 		sigma_invention = H * reduced_sigma * H.getT()  + sigma_z
-		kalman_gain = reduced_sigma*H.getT()*sigma_invention.getI()
+		kalman_gain = reduced_sigma * H.getT() * sigma_invention.getI()
 
-		self.s[ii:ii+2] = self.s[ii:ii+2] + kalman_gain[ii:ii+2]*(z - hat_z)
-		self.s[jj:jj+2] = self.s[jj:jj+2] + kalman_gain[jj:jj+2]*(z - hat_z)
+
+		self.s[ii:ii+2] = self.s[ii:ii+2] + kalman_gain[ii:ii+2] * (z-hat_z)
+		self.s[jj:jj+2] = self.s[jj:jj+2] + kalman_gain[jj:jj+2] * (z-hat_z)
 
 		self.sigma = self.sigma - kalman_gain*H*reduced_sigma
 
