@@ -1,6 +1,3 @@
-# supposedly, we can inherit from gs_robot.py
-# however, this algorithm separates the dependent and the independent part of the covariance matrix
-
 from numpy import matrix
 from numpy import random
 from math import cos, sin, atan2, sqrt
@@ -26,7 +23,6 @@ class GS_SCI_Robot():
 
 	def prop_update(self):
 
-
 		# select valid motion input
 		[v, a_v] = [max_v*random.uniform(-1,1), max_omega*random.uniform(-1,1)]
 		v_star = v + random.normal(0, sqrt(var_u_v))
@@ -46,32 +42,23 @@ class GS_SCI_Robot():
 
 		self.theta = self.theta + a_v*dt
 
-
 		ii = 2*self.index
 
 		# estimation update
 		self.s[ii,0] = self.s[ii,0] + cos(self.theta)*v*dt
 		self.s[ii+1,0] = self.s[ii+1,0] + sin(self.theta)*v*dt
 
+
 		# covariance update
 		for j in range(N):
-			inx = 2*j
+			jj = 2*j
 
 			if j==self.index:
-				total_sigma = self.sigma_i[inx:inx+2, inx:inx+2] + self.sigma_d[inx:inx+2, inx:inx+2]
-				self.sigma_i[inx:inx+2, inx:inx+2] = self.sigma_i[inx:inx+2, inx:inx+2]+ dt*dt*rot_mtx(self.theta)*matrix([[var_u_v, 0],[0, 0]])*rot_mtx(self.theta).T
-				total_sigma = total_sigma + dt*dt*rot_mtx(self.theta)*matrix([[var_u_v, 0],[0, 0]])*rot_mtx(self.theta).T
-				self.sigma_i[inx:inx+2, inx:inx+2] = total_sigma - self.sigma_i[inx:inx+2, inx:inx+2]
+				rot_mtx_theta = rot_mtx(self.theta)
+				self.sigma_i[jj:jj+2, jj:jj+2] += dt*dt*rot_mtx_theta*matrix([[var_u_v, 0],[0, 0]])*rot_mtx_theta.T
 
 			else:
-
-
-				total_sigma = self.sigma_i[inx:inx+2, inx:inx+2] + self.sigma_d[inx:inx+2, inx:inx+2]
-				self.sigma_i[inx:inx+2, inx:inx+2] = self.sigma_i[inx:inx+2, inx:inx+2]+ dt*dt*var_v*i_mtx_2.copy()
-				total_sigma = total_sigma + dt*dt*var_v*i_mtx_2.copy()
-				self.sigma_i[inx:inx+2, inx:inx+2] = total_sigma - self.sigma_i[inx:inx+2, inx:inx+2]
-
-
+				self.sigma_i[jj:jj+2, jj:jj+2] += dt*dt*var_v*i_mtx_2.copy()
 
 
 	def ablt_obsv(self, obs_value, landmark):
@@ -89,15 +76,12 @@ class GS_SCI_Robot():
 		dis = obs_value[0]
 		phi = obs_value[1]
 
-		#z = [dis*cos(phi), dis*sin(phi)]
 		hat_z = rot_mtx(self.theta).getT() * (landmark.position + H_i*self.s)
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
 		sigma_z = rot_mtx(phi) * matrix([[var_dis, 0],[0, dis*dis*var_phi]]) * rot_mtx(phi).getT() 
 		sigma_invention = H * total_sigma * H.getT()  + sigma_z
 		kalman_gain = total_sigma * H.getT()*sigma_invention.getI()
-
-
 
 		self.s = self.s + kalman_gain*(z - hat_z)
 
@@ -122,7 +106,6 @@ class GS_SCI_Robot():
 		dis = obs_value[0]
 		phi = obs_value[1]
 
-		#z = [dis*cos(phi), dis*sin(phi)]
 		hat_z = H * self.s
 		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
 
