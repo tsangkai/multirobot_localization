@@ -120,7 +120,14 @@ gs_sci_file.close()
 
 ### Performance Plot
 
-y_lim_upper = 0.3 #1.1 
+y_lim = [0, 0.32] 
+x_lim = [0, sim_env.total_T*sim_env.dt]
+
+x_lim_boarder = (x_lim[1]-x_lim[0])*0.01
+x_lim_extra = [x_lim[0]-x_lim_boarder, x_lim[1]+x_lim_boarder]
+
+y_lim_boarder = (y_lim[1]-y_lim[0])*0.01
+y_lim_extra = [y_lim[0]-y_lim_boarder, y_lim[1]+y_lim_boarder]
 
 plt.figure(1)
 plt.subplot(211)
@@ -134,8 +141,8 @@ gs_ci_plt, = plt.plot(time_arr, gs_ci_error, label = 'GS CI', linewidth = 1.6, c
 
 plt.legend([ls_cen_plt, ls_ci_plt, ls_bda_plt, gs_ci_plt, gs_sci_plt], ['LS Cen', 'LS CI', 'LS BDA', 'GS CI', 'GS SCI'])
 plt.ylabel('RMSE [m]')
-plt.xlim([0, sim_env.total_T*sim_env.dt])
-plt.ylim([0, y_lim_upper])
+plt.xlim(x_lim_extra)
+plt.ylim(y_lim_extra)
 
 
 
@@ -158,11 +165,11 @@ plt.plot(time_arr, gs_sci_tr, linewidth = 1.6, color = sim_color['gs_sci'])
 plt.legend()
 plt.xlabel('time [s]')
 plt.ylabel('RMTE [m]')
-plt.xlim([0, sim_env.total_T*sim_env.dt])
-plt.ylim([0, y_lim_upper])
+plt.xlim(x_lim_extra)
+plt.ylim(y_lim_extra)
 
 
-# plt.savefig('plot/performance_dr.png')
+plt.savefig('plot/performance.png')
 
 plt.show()
 
