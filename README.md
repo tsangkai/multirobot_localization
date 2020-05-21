@@ -10,7 +10,7 @@ For GS (global-state) algorithms, one can directly run `gs_ci_sim.py` or `gs_sci
 
 For LS (local-state) algorithms, one can run `ls_sim.py` with argument `cen`, `bda`, or `ci` to specify which algorithm will be applied.
 
-## Simulation Result
+## Covariance Boundedness
 
 
 ![Performance plot](plot/performance_dr.png)
@@ -24,3 +24,6 @@ This simulation with absolute obervation only.
 ![Performance plot](plot/performance.png)
 
 This simulation uses the topology presented in our paper.
+
+
+## Topology
