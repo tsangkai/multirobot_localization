@@ -6,8 +6,10 @@ import numpy as np
 import math
 
 import sim_env
+from topology import Topology
 
 
+### Algorithm
 algorithm = sys.argv[1]
 output_file_name = 'ls_' + algorithm + '_output.txt'
 
@@ -22,6 +24,24 @@ elif algorithm == 'ci':
 
 print("run " + algorithm + ":")
 
+
+### Network Topology
+# topo_file = open('topology/default.txt', 'r')
+topo_file = open('topology/output.txt', 'r')
+
+node_num_str = topo_file.readline()
+observ_topology = Topology(int(node_num_str))
+
+edge_num_str = topo_file.readline()
+
+for i in range(int(edge_num_str)):
+	line = topo_file.readline()
+	edge = line.split(", ")
+
+	observ_topology.add_edge(int(edge[0]), int(edge[1]))
+
+
+### Simulation Body
 
 num_of_trial = sim_env.num_of_trial
 total_T = sim_env.total_T
@@ -52,28 +72,21 @@ for i in range(num_of_trial):
 		# motion propagation
 		robots.prop_update()
 
-
 		# observation update
-		#robot 0
-		[dis, phi] = sim_env.relative_measurement(robots.position[0:2], robots.theta[0], landmarks[0].position)
-		robots.ablt_obsv(0, [dis, phi], landmarks[0])
+		for edge in observ_topology.edges:
+			[observer_idx, observed_idx] = edge
 
-		# robot 2
-		[dis, phi] = sim_env.relative_measurement(robots.position[4:6], robots.theta[2], robots.position[0:2])
-		robots.rela_obsv(2, 0, [dis, phi])
+			# absoluate observation
+			if observed_idx == sim_env.N:
+				[dis, phi] = sim_env.relative_measurement(robots.position[2*observer_idx:2*observer_idx+2], robots.theta[observer_idx], landmarks[0].position)
+				robots.ablt_obsv(observer_idx, [dis, phi], landmarks[0])				
 
-		[dis, phi] = sim_env.relative_measurement(robots.position[4:6], robots.theta[2], robots.position[2:4])
-		robots.rela_obsv(2, 1, [dis, phi])
+			# relative observation
+			else:
+				[dis, phi] = sim_env.relative_measurement(robots.position[2*observer_idx:2*observer_idx+2], robots.theta[observer_idx], robots.position[2*observed_idx:2*observed_idx+2])
+				robots.rela_obsv(observer_idx, observed_idx, [dis, phi])
 
-		# robot 3
-		[dis, phi] = sim_env.relative_measurement(robots.position[6:8], robots.theta[3], landmarks[0].position)
-		robots.ablt_obsv(3, [dis, phi], landmarks[0])
-
-		[dis, phi] = sim_env.relative_measurement(robots.position[6:8], robots.theta[3], robots.position[8:10])
-		robots.rela_obsv(3, 4, [dis, phi])
-		
-
-		# real error
+		# localization error
 		s = 0
 		for j in range(N):
 			jj = 2*j
@@ -85,12 +98,11 @@ for i in range(num_of_trial):
 		sigma_tr_arr[t] += math.sqrt(robots.sigma.trace()[0,0]/float(N)) / float(num_of_trial)
 
 
-# output performance
+### Simulation Output
 
 file = open(output_file_name, 'w')
 
 for t in range(total_T):
-
 	file.write(str(sigma_tr_arr[t]) + ', ' + str(error_arr[t]) + '\n')
 
 file.close()

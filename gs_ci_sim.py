@@ -5,6 +5,8 @@ import numpy as np
 import math
 
 import sim_env
+from topology import Topology
+
 from gs_ci_robot import GS_CI_Robot
 
 
@@ -16,6 +18,34 @@ N = sim_env.N
 
 # number of landmark
 M = sim_env.M 
+
+
+### Network Topology
+topo_file = open('topology/default.txt', 'r')
+
+node_num_str = topo_file.readline()
+observ_topology = Topology(int(node_num_str))
+comm_topology = Topology(int(node_num_str))
+
+edge_num_str = topo_file.readline()
+
+for i in range(int(edge_num_str)):
+	line = topo_file.readline()
+	edge = line.split(", ")
+
+	observ_topology.add_edge(int(edge[0]), int(edge[1]))
+
+edge_num_str = topo_file.readline()
+for i in range(int(edge_num_str)):
+	line = topo_file.readline()
+	edge = line.split(", ")
+
+	comm_topology.add_edge(int(edge[0]), int(edge[1]))
+
+topo_file.close()
+
+
+
 
 sigma_tr_arr = [0] * total_T
 sigma_th_tr_arr = [0] * total_T
@@ -39,38 +69,35 @@ for i in range(num_of_trial):
 	# simulation body
 	for t in range(total_T):
  
-		### motion propagation 
+		# motion propagation 
 		robots[0].prop_update()
 		robots[1].prop_update()
 		robots[2].prop_update()
 		robots[3].prop_update()
 		robots[4].prop_update()
 		
-		### observation update
-		#robot 0
-		[dis, phi] = sim_env.relative_measurement(robots[0].position, robots[0].theta, landmarks[0].position)
-		robots[0].ablt_obsv([dis, phi], landmarks[0])
+		# observation update
+		for edge in observ_topology.edges:
+			[observer_idx, observed_idx] = edge
 
-		# robot 2
-		[dis, phi] = sim_env.relative_measurement(robots[2].position, robots[2].theta, robots[0].position)
-		robots[2].rela_obsv(0, [dis, phi])
+			# absoluate observation
+			if observed_idx == sim_env.N:
+				[dis, phi] = sim_env.relative_measurement(robots[observer_idx].position, robots[observer_idx].theta, landmarks[0].position)
+				robots[observer_idx].ablt_obsv([dis, phi], landmarks[0])				
 
-		[dis, phi] = sim_env.relative_measurement(robots[2].position, robots[2].theta, robots[1].position)
-		robots[2].rela_obsv(1, [dis, phi])
+			# relative observation
+			else:
+				[dis, phi] = sim_env.relative_measurement(robots[observer_idx].position, robots[observer_idx].theta, robots[observed_idx].position)
+				robots[observer_idx].rela_obsv(observed_idx, [dis, phi])
 
-		# robot 3
-		[dis, phi] = sim_env.relative_measurement(robots[3].position, robots[3].theta, landmarks[0].position)
-		robots[3].ablt_obsv([dis, phi], landmarks[0])
+		# communication update
+		for edge in comm_topology.edges:
+			[sender_idx, receiver_idx] = edge
 
-		[dis, phi] = sim_env.relative_measurement(robots[3].position, robots[3].theta, robots[4].position)
-		robots[3].rela_obsv(4, [dis, phi])
+			robots[receiver_idx].comm(robots[sender_idx].s, robots[sender_idx].sigma, robots[sender_idx].th_sigma)
 
-		### communication update
-		robots[2].comm(robots[3].s, robots[3].sigma, robots[3].th_sigma)
-		robots[0].comm(robots[2].s, robots[2].sigma, robots[2].th_sigma)
-		
 
-		### error calculation
+		# error calculation
 		# real error
 		focus_index = 0
 		s = 0
