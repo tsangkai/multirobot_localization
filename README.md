@@ -45,7 +45,7 @@ For LS algorithms, one can run `ls_sim.py` with argument `cen`, `bda`, or `ci` t
 ## Covariance Boundedness
 
 
-!()[plot/performance.png]
+![](plot/performance.png)
 
 
 ## Observation and Communication Topologies
