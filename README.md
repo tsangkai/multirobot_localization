@@ -2,9 +2,19 @@
 
 This is the simulation code for the paper "Resilient Multirobot Cooperative Localization with Explicit Communication" submitted to *IEEE Transaction on Robotics*.
 
+
+
 ## Multirobot Cooperative Localization Algorithm based on Covariance Intersection
 
-This is our algorithm developed in the paper.
+This is our algorithm developed in the paper. The proposed algorithm contains 3 steps:
+
+### Motion propagation update
+
+### Observation update
+
+### Communication update
+
+
 
 ## Other Multirobot Cooperative Localization Algorithms
 
@@ -12,9 +22,15 @@ We simulate 4 other algorithms for comparision. We rename and classify them to e
 
 ### LS-Cen
 
+### LS-CI
+
+### LS-BDA
+
 ### GS-SCI
 
 We simulate the algorithm based on our proposed structure. However, the communication update is realized by the split covariance intersection in [].
+
+
 
 ## Usage
 
@@ -24,9 +40,14 @@ For GS algorithms, one can directly run `gs_ci_sim.py` or `gs_sci_sim.py`.
 
 For LS algorithms, one can run `ls_sim.py` with argument `cen`, `bda`, or `ci` to specify which algorithm will be applied.
 
+
+
 ## Covariance Boundedness
 
+
+
 ## Observation and Communication Topologies
+
 
 
 ## TODO
