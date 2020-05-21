@@ -10,7 +10,7 @@ class GS_CI_Robot(GS_Robot):
 
 	def comm(self, comm_robot_s, comm_robot_sigma, comm_robot_th_sigma):
 
-		ci_coeff = 0.83
+		ci_coeff = 0.8
 
 		sig_inv = ci_coeff*self.sigma.getI() + (1-ci_coeff)*comm_robot_sigma.getI()
 

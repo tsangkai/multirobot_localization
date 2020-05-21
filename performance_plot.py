@@ -125,14 +125,14 @@ y_lim_upper = 0.3 #1.1
 plt.figure(1)
 plt.subplot(211)
 
-plt.plot(time_arr, ls_cen_error, label = 'LS Cen', linewidth = 1.6, color = sim_color['ls_cen'])
-plt.plot(time_arr, ls_ci_error, label = 'LS CI', linewidth = 1.6, color = sim_color['ls_ci'])
-plt.plot(time_arr, ls_bda_error, label = 'LS BDA', linewidth = 1.6, color = sim_color['ls_bda'])
+ls_cen_plt, = plt.plot(time_arr, ls_cen_error, label = 'LS Cen', linewidth = 1.6, color = sim_color['ls_cen'])
+ls_ci_plt, = plt.plot(time_arr, ls_ci_error, label = 'LS CI', linewidth = 1.6, color = sim_color['ls_ci'])
+ls_bda_plt, = plt.plot(time_arr, ls_bda_error, label = 'LS BDA', linewidth = 1.6, color = sim_color['ls_bda'])
 
-plt.plot(time_arr, gs_ci_error, label = 'GS CI', linewidth = 1.6, color = sim_color['gs_ci'])
-plt.plot(time_arr, gs_sci_error, label = 'GS SCI', linewidth = 1.6, color = sim_color['gs_sci'])
+gs_sci_plt, = plt.plot(time_arr, gs_sci_error, label = 'GS SCI', linewidth = 1.6, color = sim_color['gs_sci'])
+gs_ci_plt, = plt.plot(time_arr, gs_ci_error, label = 'GS CI', linewidth = 1.6, color = sim_color['gs_ci'])
 
-plt.legend()
+plt.legend([ls_cen_plt, ls_ci_plt, ls_bda_plt, gs_ci_plt, gs_sci_plt], ['LS Cen', 'LS CI', 'LS BDA', 'GS CI', 'GS SCI'])
 plt.ylabel('RMSE [m]')
 plt.xlim([0, sim_env.total_T*sim_env.dt])
 plt.ylim([0, y_lim_upper])

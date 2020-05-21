@@ -90,6 +90,38 @@ class GS_SCI_Robot():
 	def rela_obsv(self, obs_idx, obs_value):
 		ii = 2*self.index
 		jj = 2*obs_idx
+		total_sigma = self.sigma_i + self.sigma_d
+
+
+		H_ij = matrix([[0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0]], dtype=float)
+		H_ij[0, ii] = -1
+		H_ij[1, ii+1] = -1
+		H_ij[0, jj] = 1
+		H_ij[1, jj+1] = 1
+
+		H = sim_env.rot_mtx(self.theta).getT()*H_ij
+
+		dis = obs_value[0]
+		phi = obs_value[1]
+
+		hat_z = H * self.s
+		z = matrix([dis*cos(phi), dis*sin(phi)]).getT()
+
+		sigma_z = sim_env.rot_mtx(phi) * matrix([[sim_env.var_dis, 0],[0, (dis**2)*sim_env.var_phi]]) * sim_env.rot_mtx(phi).getT() 
+		sigma_invention = H * total_sigma * H.getT() + sigma_z
+		kalman_gain = total_sigma * H.getT() * sigma_invention.getI()
+
+		self.s = self.s + kalman_gain*(z - hat_z)
+
+		total_sigma = total_sigma - kalman_gain * H * total_sigma
+		self.sigma_i = (i_mtx_10.copy() - kalman_gain*H) * self.sigma_i * (i_mtx_10.copy() - kalman_gain*H).getT() + kalman_gain * sigma_z * kalman_gain.getT()
+		self.sigma_d = total_sigma - self.sigma_i
+
+
+	# the original algorithm in the paper
+	def rela_obsv_original(self, obs_idx, obs_value):
+		ii = 2*self.index
+		jj = 2*obs_idx
 
 		H_ij = matrix([[0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0]], dtype=float)
 		H_ij[0, ii] = -1
@@ -122,7 +154,7 @@ class GS_SCI_Robot():
 
 	def comm(self, comm_robot_s, comm_robot_sigma_i, comm_robot_sigma_d):
 
-		sci_coeff =  0.93
+		sci_coeff =  0.8
 
 
 		p_1 = (1/sci_coeff) * self.sigma_d + self.sigma_i

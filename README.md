@@ -2,6 +2,12 @@
 
 This is the simulation code for the paper "Resilient Multirobot Cooperative Localization with Explicit Communication" submitted to *IEEE Transaction on Robotics*.
 
+## Multirobot Cooperative Localization Algorithms
+
+### GS-SCI
+
+We simulate the algorithm based on our proposed structure. However, the communication update is realized by the split covariance intersection in [].
+
 ## Usage
 
 All the simulation parameters are specified in `sim_env.py`. One can specify the random seed here as well.
@@ -32,3 +38,5 @@ This simulation uses the topology presented in our paper.
 ## TODO
 
 - generalize the number of robots
+
+## Reference

@@ -90,8 +90,8 @@ for i in range(num_of_trial):
 
 		# communication update
 		for edge in comm_topology.edges:
-			[sender_idx, receiver_idx] = edge
 
+		 	[sender_idx, receiver_idx] = edge
 			robots[receiver_idx].comm(robots[sender_idx].s, robots[sender_idx].sigma_i, robots[sender_idx].sigma_d)
 
 		# real error

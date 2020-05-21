@@ -26,8 +26,8 @@ print("run " + algorithm + ":")
 
 
 ### Network Topology
-# topo_file = open('topology/default.txt', 'r')
-topo_file = open('topology/output.txt', 'r')
+topo_file = open('topology/default.txt', 'r')
+# topo_file = open('topology/output.txt', 'r')
 
 node_num_str = topo_file.readline()
 observ_topology = Topology(int(node_num_str))
