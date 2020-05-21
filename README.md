@@ -26,7 +26,7 @@ This simulation with absolute obervation only.
 This simulation uses the topology presented in our paper.
 
 
-## Topology
+## Observation and Communication Topologies
 
 
 ## TODO
