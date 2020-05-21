@@ -27,3 +27,8 @@ This simulation uses the topology presented in our paper.
 
 
 ## Topology
+
+
+## TODO
+
+- generalize the number of robots
