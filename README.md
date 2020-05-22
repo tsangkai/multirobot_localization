@@ -61,6 +61,6 @@ LS\-BDA | bidirectional
 
 ## TODO
 
-- [] generalize the number of robots
+- [ ] generalize the number of robots
 
 ## Reference
