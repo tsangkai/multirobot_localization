@@ -52,7 +52,7 @@ For LS algorithms, one can run `ls_sim.py` with argument `cen`, `bda`, or `ci` t
 
 Deu to the detailed implementation of each algorithm, we first assume that communication is not necessary after the absolute observation. We then investigate the required communication links after the relative observation for each LS algorithms. 
 
-             | relative observation 
+algorithm   | relative observation 
 ------------ | ------------- 
 LS\-Cen | all\-to\-all
 LS\-CI | directional
