@@ -54,9 +54,9 @@ Deu to the detailed implementation of each algorithm, we first assume that commu
 
              | relative observation 
 ------------ | ------------- 
-LS-Cen | all-to-all | -
-LS-CI | directional | -
-LS-BDA | bidirectional | -
+LS\-Cen | all\-to\-all
+LS\-CI | directional
+LS\-BDA | bidirectional
 
 
 ## TODO
