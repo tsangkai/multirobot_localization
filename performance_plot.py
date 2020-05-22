@@ -120,7 +120,7 @@ gs_sci_file.close()
 
 ### Performance Plot
 
-y_lim = [0, 0.32] 
+y_lim = [0, 0.25] 
 x_lim = [0, sim_env.total_T*sim_env.dt]
 
 x_lim_boarder = (x_lim[1]-x_lim[0])*0.01

@@ -28,7 +28,7 @@ We simulate 4 other algorithms for comparision. We rename and classify them to e
 
 ### GS-SCI
 
-We simulate the algorithm based on our proposed structure. However, the communication update is realized by the split covariance intersection in [].
+This algorithm follows the same strucutre of the proposed algorithm but the communication update is realized by the split covariance intersection in [].
 
 
 
@@ -50,10 +50,17 @@ For LS algorithms, one can run `ls_sim.py` with argument `cen`, `bda`, or `ci` t
 
 ## Observation and Communication Topologies
 
+Deu to the detailed implementation of each algorithm, we first assume that communication is not necessary after the absolute observation. We then investigate the required communication links after the relative observation for each LS algorithms. 
+
+             | relative observation 
+------------ | ------------- 
+LS-Cen | all-to-all | -
+LS-CI | directional | -
+LS-BDA | bidirectional | -
 
 
 ## TODO
 
-- generalize the number of robots
+- [] generalize the number of robots
 
 ## Reference
