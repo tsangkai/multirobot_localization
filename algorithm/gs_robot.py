@@ -25,19 +25,16 @@ class GS_Robot:
 	def prop_update(self):
 
 		# select valid motion input
-		[v, a_v] = [sim_env.max_v*random.uniform(-1,1), sim_env.max_omega*random.uniform(-1,1)]
-		v_star = v + random.normal(0, sqrt(sim_env.var_u_v))
-		pre_update_position = [self.position[0]+cos(self.theta)*v_star*dt, self.position[1]+sin(self.theta)*v_star*dt]
-
+		[v, omega] = [0,0]
+		v_star = 0
+		pre_update_position = [100, 100]
 
 		while(not sim_env.inRange(pre_update_position, sim_env.origin)):
-
-			[v, a_v] = [sim_env.max_v*random.uniform(-1,1), sim_env.max_omega*random.uniform(-1,1)]
+			[v, omega] = [sim_env.max_v*random.uniform(-1,1), sim_env.max_omega*random.uniform(-1,1)]
 			v_star = v + random.normal(0, sqrt(sim_env.var_u_v))
-			pre_update_position = [self.position[0]+cos(self.theta)*v_star*dt, self.position[1]+sin(self.theta)*v_star*dt]
+			pre_update_position = [self.position[0] + cos(self.theta)*v_star*dt, self.position[1] + sin(self.theta)*v_star*dt]
 
-
-		self.theta = self.theta + a_v * dt
+		self.theta = self.theta + omega * dt
 
 		# real position update
 		self.position[0] = self.position[0] + cos(self.theta)*v_star*dt
@@ -45,24 +42,24 @@ class GS_Robot:
 
 
 
-		i = 2*self.index
+		ii = 2*self.index
 
 		# estimation update
-		self.s[i,0] = self.s[i,0] + cos(self.theta)*v*dt
-		self.s[i+1,0] = self.s[i+1,0] + sin(self.theta)*v*dt
+		self.s[ii,0] = self.s[ii,0] + cos(self.theta)*v*dt
+		self.s[ii+1,0] = self.s[ii+1,0] + sin(self.theta)*v*dt
 
 		# covariance update
 		for j in range(sim_env.N):
-			idx = 2*j
+			jj = 2*j
 
 			if j==self.index:
 				rot_mtx_theta = sim_env.rot_mtx(self.theta)
-				self.sigma[idx:idx+2, idx:idx+2] += (dt**2)*rot_mtx_theta*matrix([[sim_env.var_u_v, 0],[0, 0]])*rot_mtx_theta.T
-				self.th_sigma[idx:idx+2, idx:idx+2] += 2*(dt**2)*matrix([[sim_env.var_u_v, 0],[0, 0]])
+				self.sigma[jj:jj+2, jj:jj+2] += (dt**2)*rot_mtx_theta*matrix([[sim_env.var_u_v, 0],[0, 0]])*rot_mtx_theta.T
+				self.th_sigma[jj:jj+2, jj:jj+2] += 2*(dt**2)*matrix([[sim_env.var_u_v, 0],[0, 0]])
 
 			else:
-				self.sigma[idx:idx+2, idx:idx+2] += (dt**2)*sim_env.var_v*sim_env.i_mtx_2.copy()
-				self.th_sigma[idx:idx+2, idx:idx+2] += (dt**2)*sim_env.var_v*sim_env.i_mtx_2.copy()
+				self.sigma[jj:jj+2, jj:jj+2] += (dt**2)*sim_env.var_v*sim_env.i_mtx_2.copy()
+				self.th_sigma[jj:jj+2, jj:jj+2] += (dt**2)*sim_env.var_v*sim_env.i_mtx_2.copy()
 
 
 	def ablt_obsv(self, obs_value, landmark):

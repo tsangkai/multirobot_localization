@@ -26,13 +26,13 @@ T = sim_env.total_T
 time_arr = np.linspace(0, sim_env.total_T*sim_env.dt, num=sim_env.total_T)
 
 
-
+result_dir = 'boundedness_result/'
 
 ### LS Cen
 ls_cen_tr = np.empty(T)
 ls_cen_error = np.empty(T)
 
-ls_cen_file = open('ls_cen_output.txt', 'r')
+ls_cen_file = open(result_dir + 'ls_cen_output.txt', 'r')
 
 line_count = 0
 for line in ls_cen_file:
@@ -49,7 +49,7 @@ ls_cen_file.close()
 ls_ci_tr = np.empty(T)
 ls_ci_error = np.empty(T)
 
-ls_ci_file = open('ls_ci_output.txt', 'r')
+ls_ci_file = open(result_dir + 'ls_ci_output.txt', 'r')
 
 line_count = 0
 for line in ls_ci_file:
@@ -66,7 +66,7 @@ ls_ci_file.close()
 ls_bda_tr = np.empty(T)
 ls_bda_error = np.empty(T)
 
-ls_bda_file = open('ls_bda_output.txt', 'r')
+ls_bda_file = open(result_dir + 'ls_bda_output.txt', 'r')
 
 line_count = 0
 for line in ls_bda_file:
@@ -85,7 +85,7 @@ gs_ci_tr = np.empty(T)
 gs_ci_upper_tr = np.empty(T)
 gs_ci_error = np.empty(T)
 
-gs_ci_file = open('gs_ci_output.txt', 'r')
+gs_ci_file = open(result_dir + 'gs_ci_output.txt', 'r')
 
 line_count = 0
 for line in gs_ci_file:
@@ -105,7 +105,7 @@ gs_ci_file.close()
 gs_sci_tr = np.empty(T)
 gs_sci_error = np.empty(T)
 
-gs_sci_file = open('gs_sci_output.txt', 'r')
+gs_sci_file = open(result_dir + 'gs_sci_output.txt', 'r')
 
 line_count = 0
 for line in gs_sci_file:
@@ -139,7 +139,7 @@ ls_bda_plt, = plt.plot(time_arr, ls_bda_error, label = 'LS BDA', linewidth = 1.6
 gs_sci_plt, = plt.plot(time_arr, gs_sci_error, label = 'GS SCI', linewidth = 1.6, color = sim_color['gs_sci'])
 gs_ci_plt, = plt.plot(time_arr, gs_ci_error, label = 'GS CI', linewidth = 1.6, color = sim_color['gs_ci'])
 
-plt.legend([ls_cen_plt, ls_ci_plt, ls_bda_plt, gs_ci_plt, gs_sci_plt], ['LS Cen', 'LS CI', 'LS BDA', 'GS CI', 'GS SCI'])
+plt.legend([ls_cen_plt, ls_ci_plt, ls_bda_plt, gs_ci_plt, gs_sci_plt], ['LS-Cen', 'LS-CI', 'LS-BDA', 'GS-CI', 'GS-SCI'])
 plt.ylabel('RMSE [m]')
 plt.xlim(x_lim_extra)
 plt.ylim(y_lim_extra)

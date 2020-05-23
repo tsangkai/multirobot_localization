@@ -22,10 +22,10 @@ M = sim_env.M
 
 ### Network Topology
 topo_file = open('topology/default.txt', 'r')
+# topo_file = open('topology/output.txt', 'r')
 
-node_num_str = topo_file.readline()
-observ_topology = Topology(int(node_num_str))
-comm_topology = Topology(int(node_num_str))
+observ_topology = Topology(sim_env.N)
+comm_topology = Topology(sim_env.N)
 
 edge_num_str = topo_file.readline()
 
@@ -70,18 +70,16 @@ for i in range(num_of_trial):
 	for t in range(total_T):
  
 		# motion propagation 
-		robots[0].prop_update()
-		robots[1].prop_update()
-		robots[2].prop_update()
-		robots[3].prop_update()
-		robots[4].prop_update()
+		for i in range(N):
+			robots[i].prop_update()
+
 		
 		# observation update
 		for edge in observ_topology.edges:
 			[observer_idx, observed_idx] = edge
 
 			# absoluate observation
-			if observed_idx == sim_env.N:
+			if observed_idx == N:
 				[dis, phi] = sim_env.relative_measurement(robots[observer_idx].position, robots[observer_idx].theta, landmarks[0].position)
 				robots[observer_idx].ablt_obsv([dis, phi], landmarks[0])				
 
@@ -112,7 +110,7 @@ for i in range(num_of_trial):
 
 
 # output
-file = open('gs_ci_output.txt', 'w')
+file = open('boundedness_result/gs_ci_output.txt', 'w')
 
 for t in range(total_T):
 	file.write( str(sigma_tr_arr[t]) + ', ' + str(sigma_th_tr_arr[t]) + ', ' + str(error_arr[t]) + '\n')

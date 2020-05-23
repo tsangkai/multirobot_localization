@@ -1,3 +1,6 @@
+### This simulation takes the observation topology directly.
+
+
 import sys
 sys.path.append("algorithm/")
 
@@ -11,7 +14,7 @@ from topology import Topology
 
 ### Algorithm
 algorithm = sys.argv[1]
-output_file_name = 'ls_' + algorithm + '_output.txt'
+output_file_name = 'boundedness_result/ls_' + algorithm + '_output.txt'
 
 if algorithm == 'cen':	
 	from ls_cen_team import LS_Cen_Team as LS_Team
@@ -26,11 +29,10 @@ print("run " + algorithm + ":")
 
 
 ### Network Topology
-topo_file = open('topology/default.txt', 'r')
-# topo_file = open('topology/output.txt', 'r')
+# topo_file = open('topology/default.txt', 'r')
+topo_file = open('topology/output.txt', 'r')
 
-node_num_str = topo_file.readline()
-observ_topology = Topology(int(node_num_str))
+observ_topology = Topology(sim_env.N)
 
 edge_num_str = topo_file.readline()
 
