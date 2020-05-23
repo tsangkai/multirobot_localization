@@ -58,9 +58,12 @@ LS\-Cen | all\-to\-all
 LS\-CI | directional
 LS\-BDA | bidirectional
 
+![](topology_result/topology.png)
+
 
 ## TODO
 
+- [ ] separate the motion propagation update and the exact motion propagation
 - [ ] generalize the number of robots
 
 ## Reference
