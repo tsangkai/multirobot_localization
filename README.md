@@ -65,9 +65,4 @@ LS\-BDA | bidirectional
 The observation link is established with probability 0.7.
 
 
-## TODO
-
-- [ ] separate the motion propagation update and the exact motion propagation
-- [ ] generalize the number of robots
-
 ## Reference
