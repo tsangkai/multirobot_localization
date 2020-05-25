@@ -46,6 +46,7 @@ For LS algorithms, one can run `ls_sim.py` with argument `cen`, `bda`, or `ci` t
 
 
 ![](plot/performance.png)
+The averaged RMSE and RMTE of 100 trials.
 
 
 ## Observation and Communication Topologies
