@@ -36,16 +36,16 @@ This algorithm follows the same strucutre of the proposed algorithm but the comm
 
 All the simulation parameters are specified in `sim_env.py`. One can specify the random seed here as well.
 
-For GS algorithms, one can directly run `gs_ci_sim.py` or `gs_sci_sim.py`.
+For boundedness analysis, just run `boundedness_sim.py`.
 
-For LS algorithms, one can run `ls_sim.py` with argument `cen`, `bda`, or `ci` to specify which algorithm will be applied.
+For topology analysis, please run `topology_sim.py`.
 
 
 
 ## Covariance Boundedness
 
 
-![](plot/performance.png)
+![](boundedness_result/performance.png)
 
 The averaged RMSE and RMTE of 100 trials.
 
@@ -61,6 +61,8 @@ LS\-CI | directional
 LS\-BDA | bidirectional
 
 ![](topology_result/topology.png)
+
+The observation link is established with probability 0.7.
 
 
 ## TODO
