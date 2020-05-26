@@ -65,7 +65,7 @@ Deu to the detailed implementation of each algorithm, we first assume that commu
 algorithm   | relative observation 
 ------------ | ------------- 
 LS\-Cen | all\-to\-all
-LS\-CI | directional
+LS\-CI, LS\-SCI | directional
 LS\-BDA | bidirectional
 
 ![](topology_result/topology.png)
