@@ -8,14 +8,15 @@ from math import cos, sin, atan2, sqrt
 
 ##### Simulation Parameter setup
 
-num_of_trial = 1
+
+num_of_trial = 1 # 100
 total_T = 2000  # 2000
 
 
 ##### Topology Parameter
 
 observ_prob = 0.7
-comm_prob = 0
+comm_prob = 0.8
 
 ##### Simulation Environment Setup
 

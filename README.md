@@ -24,11 +24,12 @@ We simulate 4 other algorithms for comparision. We rename and classify them to e
 
 ### LS-CI
 
-### LS-BDA
-
-### GS-SCI
+### LS-SCI
 
 This algorithm follows the same strucutre of the proposed algorithm but the communication update is realized by the split covariance intersection in [].
+
+### LS-BDA
+
 
 
 
@@ -70,7 +71,7 @@ LS\-BDA | bidirectional
 
 ![](topology_result/topology.png)
 
-The averaged RMSE and RMTE over 20 randomly generated topologies. The observation link is established with probability 0.7.
+The averaged RMSE and RMTE over 25 randomly generated topologies. The observation link is established with probability 0.7.
 
 
 ## Reference
