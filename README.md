@@ -47,7 +47,7 @@ For topology analysis, please run `topology_sim.py`.
 
 ![](boundedness_result/performance.png)
 
-The averaged RMSE and RMTE of 100 trials.
+The averaged RMSE and RMTE over 100 trials.
 
 
 ## Observation and Communication Topologies
@@ -62,7 +62,7 @@ LS\-BDA | bidirectional
 
 ![](topology_result/topology.png)
 
-The observation link is established with probability 0.7.
+The averaged RMSE and RMTE over 20 randomly generated topologies. The observation link is established with probability 0.7.
 
 
 ## Reference
