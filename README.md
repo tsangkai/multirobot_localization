@@ -44,6 +44,14 @@ For topology analysis, please run `topology_sim.py`.
 
 ## Covariance Boundedness
 
+![](boundedness_result/performance_dr.png)
+
+One trial with dead reckoning only. With identical odometry inputs, the estimation positions are the same across all algorithms.
+
+![](boundedness_result/performance_obs.png)
+
+One trial with dead reckoning and observation. LS-CI and LS-SCI have close estimation results.
+
 
 ![](boundedness_result/performance.png)
 
