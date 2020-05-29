@@ -71,7 +71,7 @@ LS\-BDA | bidirectional
 
 ![](topology_result/topology.png)
 
-The averaged RMSE and RMTE over 25 randomly generated topologies. The observation link is established with probability 0.7.
+The averaged RMSE and RMTE over 50 randomly generated topologies. The observation link is established with probability 0.75.
 
 
 ## Reference
