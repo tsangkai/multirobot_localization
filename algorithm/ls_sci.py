@@ -88,13 +88,10 @@ class LS_SCI:
 		hat_j = self.s[ii:ii+2] + sim_env.rot_mtx(self.theta[idx]) * z
 
 		kalman_gain = sigma_j * (sigma_i + sigma_j).getI()
-
 		self.s[jj:jj+2] = self.s[jj:jj+2] + kalman_gain * (hat_j - self.s[jj:jj+2])
 
 		total_sigma = (i_mtx_2 - kalman_gain) * sigma_j
-
 		self.sigma_i[jj:jj+2,jj:jj+2] = (i_mtx_2 - kalman_gain) * self.sigma_i[jj:jj+2,jj:jj+2] * (i_mtx_2 - kalman_gain).getT() + kalman_gain * self.sigma_i[ii:ii+2,ii:ii+2] * kalman_gain.getT()
- 
 		self.sigma_d[jj:jj+2,jj:jj+2] = total_sigma - self.sigma_i[jj:jj+2,jj:jj+2]
 
 

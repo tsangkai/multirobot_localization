@@ -65,11 +65,12 @@ ls_cen_rmte_arr = [0] * total_T
 ls_ci_rmse_arr = [0] * total_T
 ls_ci_rmte_arr = [0] * total_T
 
+ls_sci_rmse_arr = [0] * total_T
+ls_sci_rmte_arr = [0] * total_T
+
 ls_bda_rmse_arr = [0] * total_T
 ls_bda_rmte_arr = [0] * total_T
 
-ls_sci_rmse_arr = [0] * total_T
-ls_sci_rmte_arr = [0] * total_T
 
 for iter_of_trial in range(num_of_trial):
 
@@ -90,8 +91,8 @@ for iter_of_trial in range(num_of_trial):
 
 	ls_cen_team = LS_Cen(initial.copy())
 	ls_ci_team = LS_CI(initial.copy())
-	ls_bda_team = LS_BDA(initial.copy())
 	ls_sci_team = LS_SCI(initial.copy())
+	ls_bda_team = LS_BDA(initial.copy())
 
 
 	landmarks = [None] * M
@@ -108,8 +109,8 @@ for iter_of_trial in range(num_of_trial):
 
 			ls_cen_team.theta[n] = robots[n].theta
 			ls_ci_team.theta[n] = robots[n].theta
-			ls_bda_team.theta[n] = robots[n].theta
 			ls_sci_team.theta[n] = robots[n].theta
+			ls_bda_team.theta[n] = robots[n].theta
 
 
 		# motion propagation 
@@ -138,8 +139,8 @@ for iter_of_trial in range(num_of_trial):
 
 		ls_cen_team.motion_propagation_update(odometry_input, dt)
 		ls_ci_team.motion_propagation_update(odometry_input, dt)
-		ls_bda_team.motion_propagation_update(odometry_input, dt)
 		ls_sci_team.motion_propagation_update(odometry_input, dt)
+		ls_bda_team.motion_propagation_update(odometry_input, dt)
 
 
 		
@@ -156,8 +157,8 @@ for iter_of_trial in range(num_of_trial):
 
 				ls_cen_team.ablt_obsv_update(observer_idx, [dis, phi], landmarks[0])				
 				ls_ci_team.ablt_obsv_update(observer_idx, [dis, phi], landmarks[0])				
-				ls_bda_team.ablt_obsv_update(observer_idx, [dis, phi], landmarks[0])				
 				ls_sci_team.ablt_obsv_update(observer_idx, [dis, phi], landmarks[0])				
+				ls_bda_team.ablt_obsv_update(observer_idx, [dis, phi], landmarks[0])				
 
 			# relative observation
 			else:
@@ -168,10 +169,10 @@ for iter_of_trial in range(num_of_trial):
 
 				ls_cen_team.rela_obsv_update(observer_idx, observed_idx, [dis, phi])				
 				ls_ci_team.rela_obsv_update(observer_idx, observed_idx, [dis, phi])				
-				ls_bda_team.rela_obsv_update(observer_idx, observed_idx, [dis, phi])				
 				ls_sci_team.rela_obsv_update(observer_idx, observed_idx, [dis, phi])				
+				ls_bda_team.rela_obsv_update(observer_idx, observed_idx, [dis, phi])				
 
-		'''
+		
 		# communication update
 		for edge in comm_topology.edges:
 			[sender_idx, receiver_idx] = edge
@@ -179,7 +180,7 @@ for iter_of_trial in range(num_of_trial):
 			gs_ci_robots[receiver_idx].comm_update(gs_ci_robots[sender_idx].s, gs_ci_robots[sender_idx].sigma, gs_ci_robots[sender_idx].th_sigma)
 			gs_sci_robots[receiver_idx].comm_update(gs_sci_robots[sender_idx].s, gs_sci_robots[sender_idx].sigma_i, gs_sci_robots[sender_idx].sigma_d)
 		
-		'''
+		
 		
 
 		# error calculation
@@ -191,8 +192,8 @@ for iter_of_trial in range(num_of_trial):
 
 		ls_cen_se = 0
 		ls_ci_se = 0
-		ls_bda_se = 0
 		ls_sci_se = 0
+		ls_bda_se = 0
 
 		for j in range(N):
 			# gs_ci_se += ((gs_ci_robots[focus_idx].s[2*j,0] - robots[j].position[0]) ** 2 + (gs_ci_robots[focus_idx].s[2*j+1,0] - robots[j].position[1]) ** 2)
@@ -202,8 +203,8 @@ for iter_of_trial in range(num_of_trial):
 
 			ls_cen_se += ((ls_cen_team.s[2*j,0] - robots[j].position[0])**2 + (ls_cen_team.s[2*j+1,0] - robots[j].position[1])**2)
 			ls_ci_se += ((ls_ci_team.s[2*j,0] - robots[j].position[0])**2 + (ls_ci_team.s[2*j+1,0] - robots[j].position[1])**2)
-			ls_bda_se += ((ls_bda_team.s[2*j,0] - robots[j].position[0])**2 + (ls_bda_team.s[2*j+1,0] - robots[j].position[1])**2)
 			ls_sci_se += ((ls_sci_team.s[2*j,0] - robots[j].position[0])**2 + (ls_sci_team.s[2*j+1,0] - robots[j].position[1])**2)
+			ls_bda_se += ((ls_bda_team.s[2*j,0] - robots[j].position[0])**2 + (ls_bda_team.s[2*j+1,0] - robots[j].position[1])**2)
 
 
 
@@ -212,8 +213,8 @@ for iter_of_trial in range(num_of_trial):
 
 		ls_cen_rmse_arr[t] += sqrt(ls_cen_se/float(N)) / float(num_of_trial)
 		ls_ci_rmse_arr[t] += sqrt(ls_ci_se/float(N)) / float(num_of_trial)
-		ls_bda_rmse_arr[t] += sqrt(ls_bda_se/float(N)) / float(num_of_trial)
 		ls_sci_rmse_arr[t] += sqrt(ls_sci_se/float(N)) / float(num_of_trial)
+		ls_bda_rmse_arr[t] += sqrt(ls_bda_se/float(N)) / float(num_of_trial)
 
 
 		# covariance error
@@ -225,9 +226,9 @@ for iter_of_trial in range(num_of_trial):
 
 		ls_cen_rmte_arr[t] += sqrt(ls_cen_team.sigma.trace()[0,0]/float(N)) / float(num_of_trial)
 		ls_ci_rmte_arr[t] += sqrt(ls_ci_team.sigma.trace()[0,0]/float(N)) / float(num_of_trial)
+		ls_sci_rmte_arr[t] += sqrt(ls_sci_team.getSigma().trace()[0,0]/float(N)) / float(num_of_trial)
 		ls_bda_rmte_arr[t] += sqrt(ls_bda_team.sigma.trace()[0,0]/float(N)) / float(num_of_trial)
 
-		ls_sci_rmte_arr[t] += sqrt(ls_sci_team.getSigma().trace()[0,0]/float(N)) / float(num_of_trial)
 
 
 
@@ -237,8 +238,8 @@ gs_sci_file = open('boundedness_result/gs_sci_output.txt', 'w')
 
 ls_cen_file = open('boundedness_result/ls_cen_output.txt', 'w')
 ls_ci_file = open('boundedness_result/ls_ci_output.txt', 'w')
-ls_bda_file = open('boundedness_result/ls_bda_output.txt', 'w')
 ls_sci_file = open('boundedness_result/ls_sci_output.txt', 'w')
+ls_bda_file = open('boundedness_result/ls_bda_output.txt', 'w')
 
 
 for t in range(total_T):
@@ -247,8 +248,8 @@ for t in range(total_T):
 
 	ls_cen_file.write(str(ls_cen_rmte_arr[t]) + ', ' + str(ls_cen_rmse_arr[t]) + '\n')
 	ls_ci_file.write(str(ls_ci_rmte_arr[t]) + ', ' + str(ls_ci_rmse_arr[t]) + '\n')
-	ls_bda_file.write(str(ls_bda_rmte_arr[t]) + ', ' + str(ls_bda_rmse_arr[t]) + '\n')
 	ls_sci_file.write(str(ls_sci_rmte_arr[t]) + ', ' + str(ls_sci_rmse_arr[t]) + '\n')
+	ls_bda_file.write(str(ls_bda_rmte_arr[t]) + ', ' + str(ls_bda_rmse_arr[t]) + '\n')
 
 gs_ci_file.close()
 gs_sci_file.close()

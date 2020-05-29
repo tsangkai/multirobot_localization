@@ -15,8 +15,8 @@ total_T = 2000  # 2000
 
 ##### Topology Parameter
 
-observ_prob = 0.7
-comm_prob = 0.8
+observ_prob = 0.75
+comm_prob = 0
 
 ##### Simulation Environment Setup
 

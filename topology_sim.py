@@ -22,7 +22,7 @@ from ls_bda import LS_BDA
 num_of_trial = sim_env.num_of_trial
 total_T = sim_env.total_T
 
-num_of_topology = 25
+num_of_topology = 50
 
 N = sim_env.N     # number of robot
 M = sim_env.M     # number of landmark
@@ -45,6 +45,8 @@ rmte_arr = {
 	'LS-BDA': 0.0,
 	'GS-CI': 0.0,
 }
+
+print('comm. prob. = ' + str(sim_env.comm_prob))
 
 for iter_of_topology in range(num_of_topology):
 
