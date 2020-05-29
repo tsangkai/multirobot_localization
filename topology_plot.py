@@ -59,7 +59,7 @@ with open('topology_result/rmte.txt') as rmte_file:
 
 ### Data visualization
 
-y_lim = [0, 0.14] 
+y_lim = [0, 0.18] 
 x_lim = [0, 1]
 
 x_lim_boarder = (x_lim[1]-x_lim[0])*0.01
