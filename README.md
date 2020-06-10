@@ -73,5 +73,10 @@ LS\-BDA | bidirectional
 
 The averaged RMSE and RMTE over 50 randomly generated topologies. The observation link is established with probability 0.75.
 
+![](topology_result/topology_error.png)
+
+The averaged RMSE and RMTE over 50 randomly generated topologies. The shaded area denotes the standard deviation. The observation link is established with probability 0.75.
+
+
 
 ## Reference
