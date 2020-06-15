@@ -1,6 +1,6 @@
 # Multirobot Localization Simulation
 
-This is the simulation code for the paper "Resilient Multirobot Cooperative Localization with Explicit Communication" submitted to *IEEE Transaction on Robotics*.
+This is the simulation code for the paper "Resilient and Consistent Multirobot Cooperative Localization with Covariance Intersection" submitted to *IEEE Transaction on Robotics*.
 
 
 
@@ -18,15 +18,13 @@ This is our algorithm developed in the paper. The proposed algorithm contains 3 
 
 ## Other Multirobot Cooperative Localization Algorithms
 
-We simulate 4 other algorithms for comparision. We rename and classify them to emphasize the structural difference. The first category is the local state (LS) algorithms, where each robot only tracks its own spatial state. The other category is the global state (GS) algorithms, where each robot tracks the state of the entire robot team.
+We simulate 4 other algorithms for comparision. We rename and classify them to emphasize the structural difference. For algorithms in which each robot only tracks its own spatial state, we call them local state (LS) algorithms, in order to distinguish from our algorithm in which the spatial state of the entire robot team is tracked in each robot.
 
 ### LS-Cen
 
 ### LS-CI
 
 ### LS-SCI
-
-This algorithm follows the same strucutre of the proposed algorithm but the communication update is realized by the split covariance intersection in [].
 
 ### LS-BDA
 
@@ -59,7 +57,7 @@ One trial with dead reckoning and observation. LS-CI and LS-SCI have close estim
 The averaged RMSE and RMTE over 100 trials.
 
 
-## Observation and Communication Topologies
+## Observation and Communication Graphs
 
 Deu to the detailed implementation of each algorithm, we first assume that communication is not necessary after the absolute observation. We then investigate the required communication links after the relative observation for each LS algorithms. 
 
@@ -71,12 +69,4 @@ LS\-BDA | bidirectional
 
 ![](topology_result/topology.png)
 
-The averaged RMSE and RMTE over 50 randomly generated topologies. The observation link is established with probability 0.75.
-
-![](topology_result/topology_error.png)
-
-The averaged RMSE and RMTE over 50 randomly generated topologies. The shaded area denotes the standard deviation. The observation link is established with probability 0.75.
-
-
-
-## Reference
+The averaged RMSE and RMTE over 50 randomly generated graphs. The observation link is established with probability 0.75.
